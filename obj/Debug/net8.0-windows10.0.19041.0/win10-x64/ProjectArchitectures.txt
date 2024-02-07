@@ -1,0 +1,1 @@
+C:\DevOps\BKMMirtusz\mauiResponsivityTest\mauiResponsivityTest.csproj;x64

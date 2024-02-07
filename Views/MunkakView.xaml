@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="mauiResponsivityTest.Views.MunkakView">
+    <VerticalStackLayout
+        Background="DarkGray"
+        >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+            <Image 
+                x:Name="Icon"
+                Grid.Column="0"
+                Source="dotnet_bot.png"
+                Background="Yellow"
+                />
+            <VerticalStackLayout 
+                Margin="10"
+                Grid.Column="1">
+                <Label 
+                x:Name="Title"
+                Text="Sürgős egyedi hiba üzemzavar elhárítás"
+                FontSize="16"
+                FontAttributes="Bold"
+                HorizontalOptions="Start" 
+                />
+                <Label 
+                x:Name="Address"
+                Text="Nyékládháza, Petőfi Sándor utca 5007/e"
+                HorizontalOptions="Start"
+                />
+                <Label
+                x:Name="JobId"    
+                Text="3579028/1/1"
+                />
+            </VerticalStackLayout>
+            <VerticalStackLayout 
+                Margin="10"
+                Grid.Column="2">
+                <Label
+                x:Name="Date"
+                Text="2024. 02. 07."
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                />
+                <Label
+                x:Name="JobInfo"
+                Text="Új Kiadott"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                />
+            </VerticalStackLayout>
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>
