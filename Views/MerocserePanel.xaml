@@ -1,0 +1,2588 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.MerocserePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:controls="clr-namespace:Geometria.MirtuszMobil.Client.Controls"
+             xmlns:converters="clr-namespace:Geometria.MirtuszMobil.Client.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ggcuc="clr-namespace:Geometria.GeoMobil.Client.UI.Controls;assembly=Geometria.GeoMobil.Client.UI"
+             xmlns:gmcco="clr-namespace:Geometria.MirtuszMobil.Common.Converters;assembly=Geometria.MirtuszMobil.Common"
+             xmlns:helper="clr-namespace:Geometria.MirtuszMobil.Client.HelperClasses"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:local="clr-namespace:Geometria.MirtuszMobil.Client.AdatlapViews"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:statuszFSM="clr-namespace:Geometria.MirtuszMobil.Client.StatuszFSM"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+             lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <gmcco:CsatolasParameterMultiConverter x:Key="CsatolasParameterMultiConverter" />
+
+        <!--  ========== DataTemplate Selector ==========  -->
+        <controls:MeroCsereDataTemplateSelector x:Key="BerendezesTemplateSelector" />
+
+        <converters:MeroStatuszIsEnabledConverter x:Key="MeroStatuszIsEnabledConverter" />
+
+        <Storyboard x:Key="FlashNewListItem"
+                    x:Name="FlashNewListItem">
+            <ColorAnimation AutoReverse="True"
+                            DecelerationRatio="0.8"
+                            Storyboard.TargetProperty="Background.Color"
+                            To="#FFFFBF47"
+                            Duration="0:0:1.2">
+                <ColorAnimation.EasingFunction>
+                    <CircleEase EasingMode="EaseOut" />
+                </ColorAnimation.EasingFunction>
+            </ColorAnimation>
+        </Storyboard>
+
+        <!--  ListView Fényképek Template  -->
+        <DataTemplate x:Key="PicturesTemplate">
+            <Button x:Name="MeroFeknykepButton"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding DataContext.FenykepMegnyitoCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}">
+
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+
+            </Button>
+
+        </DataTemplate>
+
+
+
+        <!--  ========== Áramváltó Template ==========  -->
+        <DataTemplate x:Key="AramvaltoTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="0,0,5,0">
+                <Expander Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,5,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Treeview marker  -->
+                            <StackPanel Grid.Column="0"
+                                        Margin="-38,5,0,5"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                <Rectangle Width="25"
+                                           Height="2"
+                                           Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                            </StackPanel>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="2"
+                                         Height="20">
+                                    <Path Data="M 72.031765 31.570149 H 22.968235 V 23.3929 h 49.06353 z M 43.445161 49.968491 V 78.3929 h 8.109675 V 49.968491 H 63.719348 L 47.5 33.789692 31.280651 49.968491 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="0"
+                                         Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Grid.Column="0"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc Aramvalto}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       Margin="0,-15,0,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+
+                                <!--  Berendezés törlés gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.ModemTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconTorles}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=IsUjFelszerelt}" />
+
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Width="{StaticResource IconButtonSizeSmall}"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Width="{StaticResource IconButtonSizeSmall}"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Státusz  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Statusz}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="False"
+                                  ItemsSource="{Binding Statuszok}"
+                                  SelectedValue="{Binding Statusz}"
+                                  SelectedValuePath="Id" />
+
+
+                        <!--  Leszerelt  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Leszerelt}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding LeszereltBerAzon}" />
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Gyári szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyariSzam}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding GyariSzam}" />
+
+                        <!--  ISU szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc ISU}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding ISUAzonosito}" />
+
+                        <!--  Típus  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tipus}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding Tipus}" />
+
+
+                        <!--  =============== 3. sor ===============  -->
+                        <!--  Feszültség szint  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc FeszultsegSzint}" />
+                        <ComboBox Grid.Row="5"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding FeszultsegSzintOpciok}"
+                                  SelectedValue="{Binding FeszultsegSzint}" />
+
+                        <!--  Tekercs csoport  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc TekercsCsoport}" />
+                        <ComboBox Grid.Row="5"
+                                  Grid.Column="1"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding TekercsCsoportOpciok}"
+                                  SelectedValue="{Binding TekercsCsoport}" />
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+        <!--  ========== Modem Template ==========  -->
+        <DataTemplate x:Key="ModemTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="0,0,5,0">
+                <Expander Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Treeview marker  -->
+                            <StackPanel Grid.Column="0"
+                                        Margin="-38,5,0,5"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                <Rectangle Width="25"
+                                           Height="2"
+                                           Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                            </StackPanel>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="2"
+                                         Height="20">
+                                    <Path Data="M 72.031765 31.570149 H 22.968235 V 23.3929 h 49.06353 z M 43.445161 49.968491 V 78.3929 h 8.109675 V 49.968491 H 63.719348 L 47.5 33.789692 31.280651 49.968491 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="0"
+                                         Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Grid.Column="0"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc Modem}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       Margin="0,-15,0,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <!--  Berendezés törlés gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.ModemTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconTorles}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=IsUjFelszerelt}" />
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Státusz  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Statusz}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="False"
+                                  ItemsSource="{Binding Statuszok}"
+                                  SelectedValue="{Binding Statusz}"
+                                  SelectedValuePath="Id" />
+
+
+                        <!--  Leszerelt  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Leszerelt}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding LeszereltBerAzon}" />
+
+                        <!--  Gyártási év  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyartasiEv}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                 IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="128">
+                            <TextBox.Text>
+                                <Binding NotifyOnValidationError="True"
+                                         Path="GyartasEv"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helper:RequiredFieldValidationRule CheckGyartasEv="True"
+                                                                            RawValue="False"
+                                                                            ValidatesOnTargetUpdated="True"
+                                                                            ValidationStep="UpdatedValue" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Gyári szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyariSzam}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding GyariSzam}" />
+
+                        <!--  Típus  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tipus}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding Tipus}" />
+
+                        <!--  ISU szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc ISU}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding ISUAzonosito}" />
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+
+
+        <!--  ========== Számláló Template ==========  -->
+        <DataTemplate x:Key="SzamlaloTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="0,0,5,0">
+                <Expander x:Name="ExpanderControl"
+                          Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Treeview marker  -->
+                            <StackPanel Grid.Column="0"
+                                        Margin="-38,5,0,5"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                <Rectangle Width="25"
+                                           Height="2"
+                                           Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                            </StackPanel>
+
+                            <!--  Felszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="2"
+                                         Height="20">
+                                    <Path Data="M 72.031765 31.570149 H 22.968235 V 23.3929 h 49.06353 z M 43.445161 49.968491 V 78.3929 h 8.109675 V 49.968491 H 63.719348 L 47.5 33.789692 31.280651 49.968491 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Leszerelt icon  -->
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="0"
+                                         Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Grid.Column="0"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc Szamlalo}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       Margin="0,-15,50,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsEnabled="{Binding Self, Converter={StaticResource SzamlaloIsTorolhetoConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                       Orientation="Horizontal">
+
+                                <!--  Számláló törlés gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.SzamlaloTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconTorles}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Tarifafajta  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Fajta}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding TarifaFajtaOpciok}"
+                                  SelectedValuePath="Azonosito">
+                            <ComboBox.SelectedValue>
+                                <Binding NotifyOnValidationError="True"
+                                         Path="KoSzamlaloAzonosito"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helper:RequiredFieldValidationRule ComboBox="True"
+                                                                            ValidatesOnTargetUpdated="True"
+                                                                            ValidationStep="RawProposedValue" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </ComboBox.SelectedValue>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.MerokeszulekTarifaFajtaUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
+
+                        <!--  Karakterszám  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc KarakterSzam}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                 IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="128">
+                            <TextBox.Text>
+                                <Binding NotifyOnValidationError="True"
+                                         Path="KarakterSzam"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helper:RequiredFieldValidationRule RawValue="False"
+                                                                            ValidatesOnTargetUpdated="True"
+                                                                            ValidationStep="RawProposedValue" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <!--  Mérőállás érték  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc MeroAllasErtek}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                 IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="{Binding MeroallasErtekMaxLength}"
+                                 PreviewTextInput="TextBox_PreviewTextInput">
+                            <TextBox.Text>
+                                <Binding Path="MeroallasErtek"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged" />
+                            </TextBox.Text>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.SzamlaloMeroallasEredetUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding Self}" />
+                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.MeroallasIdoUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}, UpdateSourceTrigger=PropertyChanged}"
+                                                           CommandParameter="{Binding Self}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Kifizetett energia  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc KifizetettEnergia}" />
+                        <AdornerDecorator Grid.Row="3"
+                                          Grid.Column="0"
+                                          Margin="{StaticResource FieldMargin}">
+                            <TextBox IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                     IsReadOnly="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type ListView}}, Converter={StaticResource SzamlaloKifEnIsReadOnlyConverter}}"
+                                     PreviewTextInput="TextBox_PreviewTextInput">
+                                <TextBox.Resources>
+                                    <helper:BindingProxyForValidation x:Key="proxy"
+                                                                      Data="{Binding}" />
+                                </TextBox.Resources>
+                                <TextBox.Text>
+                                    <Binding Converter="{StaticResource NullableConverter}"
+                                             Mode="TwoWay"
+                                             NotifyOnValidationError="True"
+                                             Path="KifizetettEnergia"
+                                             TargetNullValue=""
+                                             UpdateSourceTrigger="PropertyChanged"
+                                             ValidatesOnDataErrors="True"
+                                             ValidatesOnExceptions="True"
+                                             ValidatesOnNotifyDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <helper:RequiredFieldValidationRuleKifEnergia ValidatesOnTargetUpdated="True"
+                                                                                          ValidationStep="UpdatedValue">
+
+                                                <helper:RequiredFieldValidationRuleKifEnergia.Wrapper>
+                                                    <helper:Wrapper Szamlalo="{Binding Path=Data.Self, Source={StaticResource proxy}}" />
+                                                </helper:RequiredFieldValidationRuleKifEnergia.Wrapper>
+
+                                            </helper:RequiredFieldValidationRuleKifEnergia>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <!--<TextBox.Style>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsReadOnly" Value="True">
+                                                <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>-->
+                            </TextBox>
+                        </AdornerDecorator>
+                        <!--  Számlázó szorzó  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc SzamlaloSzorzo}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding MeroSzorzo}" />
+
+                        <!--  Mérőállás idő  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc MeroAllasIdo}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding MeroallasIdo, StringFormat={StaticResource DateStyle}}" />
+
+
+                        <!--  =============== 3. sor ===============  -->
+                        <!--  Mérőállás eredet  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc MeroAllasEredet}" />
+                        <TextBox Grid.Row="5"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding MeroAllasEredetDisplay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <!--  Tarifafajta  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tarifafajta}" />
+                        <TextBox Grid.Row="5"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding TarifaFajta}" />
+
+                        <!--  HKV kód  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc HKVKod}" />
+                        <Grid Grid.Row="5"
+                              Grid.Column="2"
+                              Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="50" />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Grid.Column="0"
+                                      Margin="{StaticResource FieldMargin}"
+                                      DisplayMemberPath="Megnevezes"
+                                      IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding HKVOpciok}"
+                                      SelectedValue="{Binding HKV, Mode=TwoWay}"
+                                      SelectedValuePath="SapCode" />
+                            <ggcuc:IconButton Grid.Column="1"
+                                              Width="35"
+                                              Margin="5,0,5,2"
+                                              VerticalAlignment="Center"
+                                              Background="{StaticResource GeometriaSecondaryColorRed}"
+                                              Command="{Binding DataContext.HKVKodTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                              Icon="{StaticResource IconTorles}"
+                                              IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                              Style="{StaticResource IconButtonStyle}"
+                                              Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+        <!--  ========== HKV Template ==========  -->
+        <DataTemplate x:Key="HKVTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="0,0,5,0">
+                <Expander Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Treeview marker  -->
+                            <StackPanel Grid.Column="0"
+                                        Margin="-38,5,0,5"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                <Rectangle Width="25"
+                                           Height="2"
+                                           Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                            </StackPanel>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="2"
+                                         Height="20">
+                                    <Path Data="M 72.031765 31.570149 H 22.968235 V 23.3929 h 49.06353 z M 43.445161 49.968491 V 78.3929 h 8.109675 V 49.968491 H 63.719348 L 47.5 33.789692 31.280651 49.968491 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-7,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Canvas.Left="0"
+                                         Canvas.Top="0"
+                                         Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="0.9"
+                                                            ScaleY="0.9" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                                <Viewbox Canvas.Left="-7"
+                                         Canvas.Top="-5"
+                                         Height="20">
+                                    <Path Data="m -147.08325 -191.10326 c -24.38624 0 -44.02005 19.63381 -44.02005 44.02005 V 242.0833 c 0 24.38623 19.63381 44.02003 44.02005 44.02003 h 389.16651 c 24.38623 0 44.02003 -19.6338 44.02003 -44.02003 v -389.16651 c 0 -24.38624 -19.6338 -44.02005 -44.02003 -44.02005 z m 11.57673 24.0179 h 366.01305 c 17.4984 0 31.57887 14.08047 31.57887 31.57888 v 366.01305 c 0 17.4984 -14.08047 31.57887 -31.57887 31.57887 h -366.01305 c -17.49841 0 -31.57888 -14.08047 -31.57888 -31.57887 v -366.01305 c 0 -17.49841 14.08047 -31.57888 31.57888 -31.57888 z"
+                                          Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Stretch="Fill">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform ScaleX="1.5"
+                                                            ScaleY="1.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezes fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc HKV}" />
+
+                                <TextBlock Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+
+
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       Margin="0,-15,0,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+
+                                <!--  Berendezés törlés gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.ModemTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconTorles}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=IsUjFelszerelt}" />
+
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Státusz  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Statusz}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="False"
+                                  ItemsSource="{Binding Statuszok}"
+                                  SelectedValue="{Binding Statusz}"
+                                  SelectedValuePath="Id" />
+
+                        <!--  Leszerelt  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Leszerelt}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding LeszereltBerAzon}" />
+
+                        <!--  Gyártási év  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyartasiEv}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                 IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="128">
+                            <TextBox.Text>
+                                <Binding NotifyOnValidationError="True"
+                                         Path="GyartasEv"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helper:RequiredFieldValidationRule CheckGyartasEv="True"
+                                                                            RawValue="False"
+                                                                            ValidatesOnTargetUpdated="True"
+                                                                            ValidationStep="UpdatedValue" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Gyári szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyariSzam}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding GyariSzam}" />
+
+                        <!--  ISU szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc ISU}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding ISUAzonosito}" />
+
+                        <!--  Típus  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tipus}" />
+                        <ComboBox Grid.Row="3"
+                                  Grid.Column="2"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding TipusOpciok}"
+                                  SelectedValue="{Binding Tipus}" />
+
+
+                        <!--  =============== 3. sor ===============  -->
+                        <!--  Plomba szám  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc PlombaSzam}"
+                                   Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+                        <TextBox Grid.Row="5"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding PlombaSzam}"
+                                 Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+
+                        <!--  Plomba darab  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc PlombaDarab}"
+                                   Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+                        <Grid Grid.Row="5"
+                              Grid.Column="1"
+                              Height="40"
+                              Margin="{StaticResource FieldMargin}"
+                              Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Grid.Column="0"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding PlombaDarab}" />
+
+                            <!--  Plomba szám és darab nullázó gomb  -->
+                            <ggcuc:IconButton Grid.Column="1"
+                                              Width="35"
+                                              Margin="5,0,5,0"
+                                              VerticalAlignment="Center"
+                                              Background="{StaticResource GeometriaSecondaryColorRed}"
+                                              Command="{Binding DataContext.PlombaAndZarofoliaResetCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                              Icon="{StaticResource IconResetField}"
+                                              Style="{StaticResource IconButtonStyle}"
+                                              Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+
+
+                        <!--  =============== 3. sor ===============  -->
+                        <!--  HKV terhelhetőség  -->
+                        <TextBlock Grid.Row="6"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc HKVTerh}" />
+                        <ComboBox Grid.Row="7"
+                                  Grid.Column="0"
+                                  MinHeight="35"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding HKVTerhOpciok}"
+                                  SelectedValue="{Binding Terhelhetoseg}" />
+
+                        <!--  Mágneskapcsoló  -->
+                        <TextBlock Grid.Row="6"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc MagnesKapcsolo}" />
+                        <ComboBox Grid.Row="7"
+                                  Grid.Column="1"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding MagnesKapcsoloOpciok}"
+                                  SelectedValue="{Binding MagnesKapcsolo}"
+                                  SelectedValuePath="Ertek" />
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+        <!--  ========== Mérőkészülék Template ==========  -->
+        <DataTemplate x:Key="MerokeszulekTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="0,0,5,0">
+                <Expander x:Name="ExpanderControl"
+                          Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource MerocsereExpander}">
+
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="MeroFelszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 25.839324 H 20 v -9.16666 H 75 Z M 42.954544 46.463785 v 31.863637 h 9.09091 V 46.463785 H 65.681818 L 47.5 28.327422 29.318182 46.463785 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="MeroLeszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Margin="5,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc MeroKeszulek}" />
+
+                                <TextBlock Margin="5,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding TarifaFajtaDisplay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <TextBlock Margin="5,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+
+
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <Grid Grid.Column="2"
+                                  MinWidth="150"
+                                  Margin="0,-15,-10,-15"
+                                  HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Számláló felszerelés  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.SzamlaloFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  Icon="{StaticResource IconInstallSzamlalo}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <ggcuc:IconButton.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource CommandParameterConverter}">
+                                            <Binding Path="DataContext"
+                                                     RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}" />
+                                        </MultiBinding>
+                                    </ggcuc:IconButton.CommandParameter>
+                                </ggcuc:IconButton>
+
+                                <!--  Felszerel  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.BerendFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  Icon="{StaticResource IconInstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                    <ggcuc:IconButton.CommandParameter>
+                                        <MultiBinding Converter="{StaticResource CommandParameterConverter}">
+                                            <Binding Path="DataContext"
+                                                     RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}" />
+                                        </MultiBinding>
+                                    </ggcuc:IconButton.CommandParameter>
+                                </ggcuc:IconButton>
+
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="2"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Grid.Column="3"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </Grid>
+
+
+                        </Grid>
+                    </Expander.Header>
+
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+
+                        <Grid Grid.Row="0"
+                              IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <!--  =============== 1. sor ===============  -->
+                            <!--  Státusz  -->
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc Statusz}" />
+                            <ComboBox Grid.Row="1"
+                                      Grid.Column="0"
+                                      Margin="{StaticResource FieldMargin}"
+                                      DisplayMemberPath="Megnevezes"
+                                      IsEnabled="False"
+                                      ItemsSource="{Binding Statuszok}"
+                                      SelectedValue="{Binding Statusz}"
+                                      SelectedValuePath="Id" />
+
+
+                            <!--  Leszerelt  -->
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc Leszerelt}" />
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="1"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     Text="{Binding LeszereltBerAzon}" />
+
+                            <!--  =============== 2. sor ===============  -->
+                            <!--  Gyári szám  -->
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc GyariSzam}" />
+                            <TextBox Grid.Row="3"
+                                     Grid.Column="0"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding GyariSzam}" />
+
+                            <!--  ISU szám  -->
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc ISU}" />
+                            <TextBox Grid.Row="3"
+                                     Grid.Column="1"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding ISUAzonosito}" />
+
+                            <!--  Típus  -->
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="2"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc Tipus}" />
+                            <ComboBox Grid.Row="3"
+                                      Grid.Column="2"
+                                      Margin="{StaticResource FieldMargin}"
+                                      IsEnabled="{Binding Self, Converter={StaticResource MeroStatuszIsEnabledConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding TipusOpciok}"
+                                      SelectedValue="{Binding Tipus}" />
+
+
+                            <!--  =============== 3. sor ===============  -->
+                            <!--  Gyártási év  -->
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="0"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc GyartasiEv}" />
+                            <TextBox Grid.Row="5"
+                                     Grid.Column="0"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                     IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=meroReadonlyEv}"
+                                     MaxLength="128">
+                                <TextBox.Text>
+                                    <Binding NotifyOnValidationError="True"
+                                             Path="GyartasEv"
+                                             TargetNullValue=""
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <helper:RequiredFieldValidationRule CheckGyartasEv="True"
+                                                                                RawValue="False"
+                                                                                ValidatesOnTargetUpdated="True"
+                                                                                ValidationStep="UpdatedValue" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <!--  Hitelesítési év  -->
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc HitelesitesiEv}" />
+                            <TextBox Grid.Row="5"
+                                     Grid.Column="1"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                     IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=meroReadonlyEv}"
+                                     MaxLength="128">
+                                <TextBox.Text>
+                                    <Binding NotifyOnValidationError="True"
+                                             Path="HitelesEv"
+                                             TargetNullValue=""
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <helper:RequiredFieldValidationRule CheckHitelesEv="True"
+                                                                                RawValue="False"
+                                                                                ValidatesOnTargetUpdated="True"
+                                                                                ValidationStep="UpdatedValue" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
+
+                            <!--  Csere év  -->
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="2"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc CsereEv}" />
+                            <TextBox Grid.Row="5"
+                                     Grid.Column="2"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding CsereEv}" />
+
+                            <!--  =============== 4. sor ===============  -->
+                            <!--  Plomba szám  -->
+                            <TextBlock Grid.Row="6"
+                                       Grid.Column="0"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc PlombaSzam2}"
+                                       Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+
+                            <TextBox Grid.Row="7"
+                                     Grid.Column="0"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding PlombaSzam}" />
+
+                            <!--  Plomba darab  -->
+                            <TextBlock Grid.Row="6"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc PlombaDarab2}"
+                                       Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+
+                            <Grid Grid.Row="7"
+                                  Grid.Column="1"
+                                  Height="40"
+                                  Margin="{StaticResource FieldMargin}"
+                                  Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" MinWidth="50" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         IsReadOnly="True"
+                                         Text="{Binding PlombaDarab}" />
+
+                                <!--  Zárófólia nullázó gomb  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="35"
+                                                  Margin="5,0,5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.PlombaAndZarofoliaResetCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconResetField}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+
+                            <!--  Zárófólia  -->
+                            <TextBlock Grid.Row="6"
+                                       Grid.Column="2"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc ZaroFolia}"
+                                       Visibility="{Binding UjFelszerelt, Converter={StaticResource BoolInverseConverter}}" />
+
+                            <TextBox Grid.Row="7"
+                                     Grid.Column="2"
+                                     Margin="{StaticResource FieldMargin}"
+                                     IsReadOnly="True"
+                                     MaxLength="128"
+                                     Text="{Binding ZaroFolia}" />
+
+
+                            <!--  =============== 5. sor ===============  -->
+                            <!--  Túláram védelem R.  -->
+                            <TextBlock Grid.Row="8"
+                                       Grid.Column="0"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc TularamVedelemR}" />
+                            <Grid Grid.Row="9"
+                                  Grid.Column="0"
+                                  Height="40"
+                                  Margin="{StaticResource FieldMargin}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" MinWidth="50" />
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox Grid.Column="0"
+                                          DropDownOpened="ComboBox_DropDownOpened"
+                                          IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding TularamVedelemOpciok}"
+                                          SelectedItem="{Binding TularamVedelemR}" />
+
+                                <!--  Kismegszakító R. felszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="35"
+                                                  Margin="5,0,5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.KismegszRFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallKismegsz}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+
+                            <!--  Túláram védelem S.  -->
+                            <TextBlock Grid.Row="8"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc TularamVedelemS}" />
+                            <Grid Grid.Row="9"
+                                  Grid.Column="1"
+                                  Height="40"
+                                  Margin="{StaticResource FieldMargin}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" MinWidth="50" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox Grid.Column="0"
+                                          DropDownOpened="ComboBox_DropDownOpened"
+                                          IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding TularamVedelemOpciok}"
+                                          SelectedItem="{Binding TularamVedelemS}" />
+
+                                <!--  Kismegszakító S. felszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="35"
+                                                  Margin="5,0,5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.KismegszSFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallKismegsz}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+
+                            <!--  Túláram védelem T.  -->
+                            <TextBlock Grid.Row="8"
+                                       Grid.Column="2"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc TularamVedelemT}" />
+                            <Grid Grid.Row="9"
+                                  Grid.Column="2"
+                                  Height="40"
+                                  Margin="{StaticResource FieldMargin}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" MinWidth="50" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox DropDownOpened="ComboBox_DropDownOpened"
+                                          IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding TularamVedelemOpciok}"
+                                          SelectedItem="{Binding TularamVedelemT}" />
+
+                                <!--  Kismegszakító T. felszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="35"
+                                                  Margin="5,0,5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.KismegszTFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallKismegsz}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+
+
+                            <!--  =============== 6. sor ===============  -->
+                            <!--  RST összes  -->
+                            <TextBlock Grid.Row="10"
+                                       Grid.Column="0"
+                                       HorizontalAlignment="Left"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc RSTOssz}" />
+                            <StackPanel Grid.Row="10"
+                                        Grid.Column="0"
+                                        Margin="10,5,10,2"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        Visibility="{Binding TularamVedelemRSTeredeti, Converter={StaticResource StringConverter}}">
+                                <TextBlock Style="{StaticResource TextBlockStyleCimke}"
+                                           Text="{lex:Loc TularamVedelemRSTeredeti}" />
+                                <TextBlock Margin="0"
+                                           Style="{StaticResource TextBlockStyleCimke}"
+                                           Text="{Binding TularamVedelemRSTeredeti}" />
+                            </StackPanel>
+                            <Grid Grid.Row="11"
+                                  Grid.Column="0"
+                                  Height="40"
+                                  Margin="{StaticResource FieldMargin}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" MinWidth="50" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                         IsReadOnly="True"
+                                         MaxLength="128">
+                                    <TextBox.Text>
+                                        <Binding NotifyOnValidationError="True"
+                                                 Path="TularamVedelemRST"
+                                                 TargetNullValue=""
+                                                 UpdateSourceTrigger="PropertyChanged">
+                                            <Binding.ValidationRules>
+                                                <helper:RequiredFieldValidationRule Tularam="True"
+                                                                                    ValidatesOnTargetUpdated="True"
+                                                                                    ValidationStep="RawProposedValue" />
+                                            </Binding.ValidationRules>
+                                        </Binding>
+                                    </TextBox.Text>
+                                </TextBox>
+
+                                <!--  Kismegszakító Összes felszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="35"
+                                                  Margin="5,0,5,0"
+                                                  VerticalAlignment="Center"
+                                                  Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Command="{Binding DataContext.KismegszOsszFelszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallKismegszOssz}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+
+                            <!--  Túláram védelem jelleg  -->
+                            <TextBlock Grid.Row="10"
+                                       Grid.Column="1"
+                                       Margin="{StaticResource FieldCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc TularamVedelem}" />
+                            <ComboBox Grid.Row="11"
+                                      Grid.Column="1"
+                                      Margin="{StaticResource FieldMargin}"
+                                      IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding TularamJellegOpciok}"
+                                      SelectedItem="{Binding TularamVedelemJelleg}">
+                                <ComboBox.SelectedValue>
+                                    <Binding NotifyOnValidationError="True"
+                                             Path="TularamVedelemJelleg"
+                                             TargetNullValue=""
+                                             UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <helper:RequiredFieldValidationRule ComboBox="True"
+                                                                                ValidatesOnTargetUpdated="True"
+                                                                                ValidationStep="RawProposedValue" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+
+                                </ComboBox.SelectedValue>
+
+                            </ComboBox>
+
+
+
+                        </Grid>
+
+                        <!--  Berendezés lista  -->
+                        <ListView x:Name="BerendList"
+                                  Grid.Row="1"
+                                  Margin="0,20,0,0"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  ItemContainerStyle="{StaticResource MeroberendezesListViewItemStyle}"
+                                  ItemTemplateSelector="{StaticResource BerendezesTemplateSelector}"
+                                  ItemsSource="{Binding Berendezesek}"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  Style="{StaticResource AdatlapPanelListViewStyle}"
+                                  VirtualizingStackPanel.IsVirtualizing="True" />
+
+                        <!--  Fénykép csatolás  -->
+                        <ggcuc:IconButton Grid.Row="2"
+                                          Width="50"
+                                          Margin="5,10,5,0"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                          Command="{Binding DataContext.MeroFenykepCsatolasCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                          Icon="{StaticResource IconAddPhoto}"
+                                          IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                          Style="{StaticResource IconButtonStyle}"
+                                          Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}">
+                            <ggcuc:IconButton.CommandParameter>
+                                <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                                    <Binding Path="."
+                                             RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="DataContext"
+                                             RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </ggcuc:IconButton.CommandParameter>
+                        </ggcuc:IconButton>
+
+                        <ScrollViewer Grid.Row="3"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <!--  Fénykép lista  -->
+                            <ListView x:Name="FenykepList"
+                                      MaxHeight="200"
+                                      Margin="0,20,0,0"
+                                      IsSynchronizedWithCurrentItem="True"
+                                      ItemContainerStyle="{StaticResource ImageListViewItemStyle}"
+                                      ItemTemplate="{StaticResource PicturesTemplate}"
+                                      ItemsSource="{Binding KapcsolodoFenykepek}"
+                                      ScrollViewer.CanContentScroll="True"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                      Style="{StaticResource AdatlapPanelListViewStyle}"
+                                      VirtualizingStackPanel.IsVirtualizing="True">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+
+                                        <WrapPanel Margin="5,10,5,10"
+                                                   Orientation="Horizontal" />
+
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                        </ScrollViewer>
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+
+        <!--  ========== Önálló Modem Template ==========  -->
+        <DataTemplate x:Key="OnalloModemTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="5,0,5,0">
+                <Expander Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 25.839324 H 20 v -9.16666 H 75 Z M 42.954544 46.463785 v 31.863637 h 9.09091 V 46.463785 H 65.681818 L 47.5 28.327422 29.318182 46.463785 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Grid.Column="0"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc Modem}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       MinWidth="100"
+                                       Margin="0,-15,0,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+
+                                <!--  Mérő alá szerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.SzerelToMeroCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallToMero}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Státusz  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Statusz}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="False"
+                                  ItemsSource="{Binding Statuszok}"
+                                  SelectedValue="{Binding Statusz}"
+                                  SelectedValuePath="Id" />
+
+
+                        <!--  Leszerelt  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Leszerelt}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding LeszereltBerAzon}" />
+
+                        <!--  Gyártási év  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyartasiEv}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged, ConverterParameter=not}"
+                                 IsReadOnly="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                 MaxLength="128">
+                            <TextBox.Text>
+                                <Binding NotifyOnValidationError="True"
+                                         Path="GyartasEv"
+                                         TargetNullValue=""
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helper:RequiredFieldValidationRule CheckGyartasEv="True"
+                                                                            RawValue="False"
+                                                                            ValidatesOnTargetUpdated="True"
+                                                                            ValidationStep="UpdatedValue" />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Gyári szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyariSzam}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding GyariSzam}" />
+
+                        <!--  Típus  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc ISU}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding Tipus}" />
+
+                        <!--  ISU szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tipus}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding ISUAzonosito}" />
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+
+        <!--  ========== Önálló Áramváltó Template ==========  -->
+        <DataTemplate x:Key="OnalloAramvaltoTemplate">
+            <Border Padding="5,0,5,0"
+                    BorderBrush="{Binding Self, Converter={StaticResource MeroBerendezesBorderConverter}}"
+                    BorderThickness="5,0,5,0">
+                <Expander Margin="0,0,0,1"
+                          Padding="10,0,10,0"
+                          HorizontalAlignment="Stretch"
+                          Background="{Binding Self, Converter={StaticResource MeroberendezesBackgroundConverter}}"
+                          Style="{StaticResource MerocsereBerendExpander}">
+                    <Expander.Header>
+                        <Grid MinHeight="40"
+                              Margin="20,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Felszerelt / Leszerelt icon  -->
+                            <Canvas x:Name="FelszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}, ConverterParameter=not}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 25.839324 H 20 v -9.16666 H 75 Z M 42.954544 46.463785 v 31.863637 h 9.09091 V 46.463785 H 65.681818 L 47.5 28.327422 29.318182 46.463785 Z"
+                                          Fill="{Binding Converter={StaticResource MeroBerendezesIconConverter}}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <Canvas x:Name="LeszereltIcon"
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Visibility="{Binding Leszerelt, Converter={StaticResource BoolConverter}}">
+                                <Viewbox Height="20">
+                                    <Path Data="M 75 69.160762 H 20 v 9.16666 H 75 Z M 42.954544 48.536301 V 16.672664 h 9.09091 V 48.536301 H 65.681818 L 47.5 66.672664 29.318182 48.536301 Z"
+                                          Fill="{StaticResource GeometriaPrimaryColorRed}"
+                                          Stretch="Fill" />
+                                </Viewbox>
+                            </Canvas>
+
+                            <!--  Berendezés fő tulajdonságok  -->
+                            <WrapPanel Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+                                <TextBlock Grid.Column="0"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{lex:Loc Aramvalto}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding GyariSzam}" />
+                            </WrapPanel>
+
+                            <!--  Gombok  -->
+                            <WrapPanel Grid.Column="3"
+                                       MinWidth="100"
+                                       Margin="0,-15,0,-15"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Orientation="Horizontal">
+
+
+                                <!--  Mérő alá szerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.SzerelToMeroCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconInstallToMero}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Leszerel gomb  -->
+                                <ggcuc:IconButton Grid.Column="0"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                  Command="{Binding DataContext.BerendLeszerelCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconUninstall}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <!--  Csere  -->
+                                <ggcuc:IconButton Grid.Column="1"
+                                                  Width="{StaticResource IconButtonSizeSmall}"
+                                                  Margin="5,0"
+                                                  Background="{StaticResource GeometriaSecondaryColorBlue2}"
+                                                  Command="{Binding DataContext.BerendCsereCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                  Icon="{StaticResource IconReplace}"
+                                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                                                  Style="{StaticResource IconButtonStyle}"
+                                                  Visibility="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Státusz  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Statusz}" />
+                        <ComboBox Grid.Row="1"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  DisplayMemberPath="Megnevezes"
+                                  IsEnabled="False"
+                                  ItemsSource="{Binding Statuszok}"
+                                  SelectedValue="{Binding Statusz}"
+                                  SelectedValuePath="Id" />
+
+
+                        <!--  Leszerelt  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Leszerelt}" />
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding LeszereltBerAzon}" />
+
+                        <!--  =============== 2. sor ===============  -->
+                        <!--  Gyári szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc GyariSzam}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="0"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding GyariSzam}" />
+
+                        <!--  ISU szám  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc ISU}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 MaxLength="128"
+                                 Text="{Binding ISUAzonosito}" />
+
+                        <!--  Típus  -->
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="2"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Tipus}" />
+                        <TextBox Grid.Row="3"
+                                 Grid.Column="2"
+                                 Margin="{StaticResource FieldMargin}"
+                                 IsReadOnly="True"
+                                 Text="{Binding Tipus}" />
+
+
+
+                        <!--  =============== 3. sor ===============  -->
+                        <!--  Feszültség szint  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc FeszultsegSzint}" />
+                        <ComboBox Grid.Row="5"
+                                  Grid.Column="0"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding FeszultsegSzintOpciok}"
+                                  SelectedValue="{Binding FeszultsegSzint}" />
+
+                        <!--  Tekercs csoport  -->
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Margin="{StaticResource FieldCimkeMargin}"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc TekercsCsoport}" />
+                        <ComboBox Grid.Row="5"
+                                  Grid.Column="1"
+                                  Margin="{StaticResource FieldMargin}"
+                                  IsEnabled="{Binding Self, Converter={StaticResource BerendezesStatuszIsLeszereltConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding TekercsCsoportOpciok}"
+                                  SelectedValue="{Binding TekercsCsoport}" />
+
+                    </Grid>
+                </Expander>
+            </Border>
+        </DataTemplate>
+
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Mérőkészülék lista  -->
+        <ListView x:Name="MerokeszulekList"
+                  Grid.Row="1"
+                  Grid.Column="0"
+                  Margin="-5"
+                  HorizontalContentAlignment="Stretch"
+                  ItemContainerStyle="{StaticResource MeroberendezesListViewItemStyle}"
+                  ItemTemplate="{StaticResource MerokeszulekTemplate}"
+                  ItemsSource="{Binding Munkautasitas.Merohely.Merokeszulekek}"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource AdatlapPanelListViewStyle}" />
+
+        <StackPanel Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <!--  Új mérőkézülék felszerelés  -->
+            <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Width="200"
+                    Height="50"
+                    Margin="0,20,0,20"
+                    Padding="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Command="{Binding BerendFelszerelCommand}"
+                    Content="{lex:Loc UjMero}"
+                    IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}" />
+
+            <!--  Visszaállítás  -->
+            <Button Grid.Row="2"
+                    Grid.Column="1"
+                    Width="200"
+                    Height="50"
+                    Margin="0,20,0,20"
+                    Padding="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Command="{Binding BerendVisszaAllitasCommand}"
+                    Content="{lex:Loc VisszaAllitas}"
+                    IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto, Converter={StaticResource IsPanelSzerkeszthetoConverter}}"
+                    Style="{StaticResource ButtonStyleForbidden}" />
+
+        </StackPanel>
+
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Margin="5,15,5,5"
+                   HorizontalAlignment="Center"
+                   Style="{StaticResource TextBlockStyleBig}"
+                   Text="{lex:Loc OnalloModemek}"
+                   Visibility="{Binding Munkautasitas.Merohely.OnalloModemek.Count, Converter={StaticResource Count0Converter}}" />
+
+        <!--  Önálló modemek lista  -->
+        <ListView x:Name="OnalloModemekList"
+                  Grid.Row="4"
+                  Grid.Column="0"
+                  Margin="-5"
+                  HorizontalContentAlignment="Stretch"
+                  ItemContainerStyle="{StaticResource MeroberendezesListViewItemStyle}"
+                  ItemTemplate="{StaticResource OnalloModemTemplate}"
+                  ItemsSource="{Binding Munkautasitas.Merohely.OnalloModemek}"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource AdatlapPanelListViewStyle}" />
+
+        <TextBlock Grid.Row="5"
+                   Grid.Column="0"
+                   Margin="5,15,5,5"
+                   HorizontalAlignment="Center"
+                   Style="{StaticResource TextBlockStyleBig}"
+                   Text="{lex:Loc OnalloAramvaltok}"
+                   Visibility="{Binding Munkautasitas.Merohely.OnalloAramvaltok.Count, Converter={StaticResource Count0Converter}}" />
+
+        <!--  Önálló áramváltók lista  -->
+        <ListView x:Name="OnalloAramvaltokList"
+                  Grid.Row="6"
+                  Grid.Column="0"
+                  Margin="-5"
+                  HorizontalContentAlignment="Stretch"
+                  ItemContainerStyle="{StaticResource MeroberendezesListViewItemStyle}"
+                  ItemTemplate="{StaticResource OnalloAramvaltoTemplate}"
+                  ItemsSource="{Binding Munkautasitas.Merohely.OnalloAramvaltok}"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource AdatlapPanelListViewStyle}" />
+
+    </Grid>
+</UserControl>

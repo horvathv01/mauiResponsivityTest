@@ -1,0 +1,173 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = true
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0-android
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = mauiResponsivityTest
+build_property.ProjectDir = C:\DevOps\BKMMirtusz\mauiResponsivityTest\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/AdatokPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.AdatokPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AdatokPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AdatokPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/AltalanosUrlapPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.AltalanosUrlapPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AltalanosUrlapPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AltalanosUrlapPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/Anyagelszamolas.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.Anyagelszamolas.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Anyagelszamolas.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Anyagelszamolas.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/BejelentesekPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.BejelentesekPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\BejelentesekPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\BejelentesekPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/DiszpecserUzenetPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.DiszpecserUzenetPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\DiszpecserUzenetPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\DiszpecserUzenetPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/FAMEngedelyekPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.FAMEngedelyekPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\FAMEngedelyekPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\FAMEngedelyekPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/FeladatPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.FeladatPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\FeladatPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\FeladatPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/FogyhelyPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.FogyhelyPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\FogyhelyPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\FogyhelyPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/GallyazasPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.GallyazasPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\GallyazasPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\GallyazasPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/HibahelyekPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.HibahelyekPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\HibahelyekPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\HibahelyekPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/Idopanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.Idopanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Idopanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Idopanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/JegyzokonyvPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.JegyzokonyvPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\JegyzokonyvPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\JegyzokonyvPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KivProjektPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KivProjektPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\KivProjektPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\KivProjektPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KtfPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KtfPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\KtfPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\KtfPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/MegosztottMunkaPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.MegosztottMunkaPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\MegosztottMunkaPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\MegosztottMunkaPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/MerocserePanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.MerocserePanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\MerocserePanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\MerocserePanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/OktatPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.OktatPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\OktatPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\OktatPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/SzereloiMegjegyzesPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.SzereloiMegjegyzesPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\SzereloiMegjegyzesPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\SzereloiMegjegyzesPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/TrafoValtoPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.TrafoValtoPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\TrafoValtoPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\TrafoValtoPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/UrlapokPanel.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.UrlapokPanel.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\UrlapokPanel.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\UrlapokPanel.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/Vedofelszerelesek.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.Vedofelszerelesek.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Vedofelszerelesek.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Vedofelszerelesek.xaml

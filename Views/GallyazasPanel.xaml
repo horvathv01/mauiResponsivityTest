@@ -1,0 +1,206 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.GallyazasPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ggcuc="clr-namespace:Geometria.GeoMobil.Client.UI.Controls;assembly=Geometria.GeoMobil.Client.UI"
+             xmlns:helper="clr-namespace:Geometria.MirtuszMobil.Client.HelperClasses"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:statuszFSM="clr-namespace:Geometria.MirtuszMobil.Client.StatuszFSM"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+             lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="GallyazasDataTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="55" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="35" />
+                    <ColumnDefinition Width="5" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="55" />
+                </Grid.RowDefinitions>
+
+                <ggcuc:SelectionDecorator Grid.Column="0"
+                                          HorizontalAlignment="Left"
+                                          Panel.ZIndex="100"
+                                          IsSelected="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding DataContext.GallyazasIkonrolMegnyitCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}, AncestorLevel=3}}"
+                                                   CommandParameter="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ggcuc:SelectionDecorator>
+
+                <Border Grid.Column="1"
+                        Background="{Binding TerEllMegfelelt, Converter={StaticResource GallyListItemBackgroundConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                            <i:InvokeCommandAction Command="{Binding DataContext.GallyazasIkonrolMegnyitCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}, AncestorLevel=3}}"
+                                                   CommandParameter="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Border>
+
+                <!--  Fa ikon  -->
+                <Canvas x:Name="GallyazasIcon"
+                        Grid.Column="1"
+                        Width="35"
+                        Height="35"
+                        IsHitTestVisible="False">
+                    <Viewbox Canvas.Left="-3"
+                             Canvas.Top="-2"
+                             Height="35">
+                        <Path Data="m 41.388889 20.000043 c -7.638889 0 -13.75 6.111111 -13.75 13.75 0 1.863889 0.397222 3.697222 1.130555 5.408334 -2.658333 2.597221 -4.186111 6.141666 -4.186111 9.869444 0 7.638889 6.111111 13.75 13.75 13.75 1.527778 0 3.055556 -0.336111 4.583334 -0.855556 v 13.077778 h 6.111111 V 59.019488 c 1.527778 0.427777 3.055555 0.702777 4.583333 0.702777 A 16.805556 16.805556 0 0 0 70.416667 42.91671 16.805556 16.805556 0 0 0 53.611111 26.111154 c -0.275 0 -0.519444 0 -0.794444 0 -2.536111 -3.788889 -6.844445 -6.111111 -11.427778 -6.111111 m 0 6.111111 c 4.033333 0 7.363889 3.147222 7.638889 7.180556 1.405555 -0.702778 3.055555 -1.069445 4.583333 -1.069445 A 10.694444 10.694444 0 0 1 64.305556 42.91671 10.694444 10.694444 0 0 1 53.611111 53.611154 c -2.933333 0 -5.713888 -1.191666 -7.761111 -3.330556 -0.611111 3.697223 -3.788889 6.386112 -7.516667 6.386112 a 7.638889 7.638889 0 0 1 -7.638889 -7.638889 c 0 -4.216667 2.444445 -5.988889 6.111112 -8.280556 C 34.361111 37.600043 33.75 35.76671 33.75 33.750043 a 7.638889 7.638889 0 0 1 7.638889 -7.638889 z"
+                              Fill="{StaticResource GeometriaPrimaryColorWhite1}" />
+                    </Viewbox>
+                </Canvas>
+
+                <WrapPanel Grid.Column="2"
+                           VerticalAlignment="Center">
+                    <!--  Terület adatai  -->
+                    <TextBlock Margin="10,0,0,0"
+                               Style="{DynamicResource TextBlockStyleBig}"
+                               Text="{Binding TeruletAdatokString, StringFormat={}{0}m²}" />
+                </WrapPanel>
+
+                <!--  Fénykép csatolva ikon  -->
+                <Canvas x:Name="GallyazasFenykepCsatolvaIcon"
+                        Grid.Column="3"
+                        Width="35"
+                        Height="35"
+                        Margin="-15,0,0,0"
+                        IsHitTestVisible="False"
+                        Visibility="{Binding IsFenykepCsatolva, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <Viewbox Canvas.Left="-3"
+                             Canvas.Top="-2"
+                             Height="35">
+                        <Path Data="m 74.389726 57.986754 -9.81446 9.816406 -4.34765 -4.347656 -3.17188 3.171875 7.51953 8.203125 12.98633 -12.988281 z m -37.701322 -37.817173 -5.5 5.5 h -8.25 a 5.5 5.5 0 0 0 -5.5 5.5 v 33 a 5.5 5.5 0 0 0 5.5 5.5 h 30.470703 a 14.732142 14.732142 0 0 1 -0.113281 -1.820312 14.732142 14.732142 0 0 1 14.732422 -14.732422 14.732142 14.732142 0 0 1 4.410156 0.675781 V 31.169581 a 5.5 5.5 0 0 0 -5.5 -5.5 h -8.25 l -5.5 -5.5 z m 8.25 13.75 a 13.75 13.75 0 0 1 13.75 13.75 13.75 13.75 0 0 1 -13.75 13.75 13.75 13.75 0 0 1 -13.75 -13.75 13.75 13.75 0 0 1 13.75 -13.75 z m 0 5.5 a 8.25 8.25 0 0 0 -8.25 8.25 8.25 8.25 0 0 0 8.25 8.25 8.25 8.25 0 0 0 8.25 -8.25 8.25 8.25 0 0 0 -8.25 -8.25 z"
+                              Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                    </Viewbox>
+                </Canvas>
+
+                <!--  Már ellenőrízve ikon  -->
+                <Canvas x:Name="MarFelmerveIcon"
+                        Grid.Column="3"
+                        Width="35"
+                        Height="35"
+                        Margin="-15,0,0,0"
+                        IsHitTestVisible="False"
+                        Visibility="{Binding MarFelmerve, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                    <Viewbox Canvas.Left="-3"
+                             Canvas.Top="-2"
+                             Height="35">
+                        <Path Data="M 75 56.66671 62.777778 68.888932 54.222222 60.333376 57.888889 56.66671 62.777778 61.555598 71.333333 53.000043 75 56.66671 M 46.888889 37.111154 a 7.3333333 7.3333333 0 0 1 7.333333 7.333333 7.3333333 7.3333333 0 0 1 -7.333333 7.333334 7.3333333 7.3333333 0 0 1 -7.333333 -7.333334 7.3333333 7.3333333 0 0 1 7.333333 -7.333333 m 0 -11 c 12.222222 0 22.66 7.602222 26.888889 18.333333 -0.611111 1.588889 -1.368889 3.08 -2.248889 4.522223 -1.417778 -0.855556 -2.982222 -1.466667 -4.644445 -1.784445 l 1.564445 -2.737778 C 64.415556 36.231154 56.08 31.000043 46.888889 31.000043 c -9.191111 0 -17.526667 5.231111 -21.56 13.444444 4.033333 8.213334 12.368889 13.444445 21.56 13.444445 l 2.957778 -0.171111 c -0.342223 1.222222 -0.513334 2.517777 -0.513334 3.837777 v 1.124445 l -2.444444 0.09778 C 34.666667 62.777823 24.228889 55.1756 20 44.444489 24.228889 33.713378 34.666667 26.111156 46.888889 26.111156 Z"
+                              Fill="{StaticResource GeometriaPrimaryColorGreen}" />
+                    </Viewbox>
+                </Canvas>
+
+                <Border Grid.Column="4"
+                        Background="{Binding TerEllMegfelelt, Converter={StaticResource GallyListItemBackgroundConverter}, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GallyazasExpanderTemplate">
+            <Expander x:Name="TipusExpander"
+                      HorizontalAlignment="Stretch"
+                      Background="Transparent">
+                <Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Style="{StaticResource TextBlockStyleAdatlapPanelCimke}"
+                                   Text="{Binding TeruletTipus}" />
+
+                        <StackPanel Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="Darabszám:" />
+                            <TextBlock Foreground="{Binding DarabSzin}"
+                                       Style="{StaticResource TextBlockStyleMid}"
+                                       Text="{Binding FeladatDarabszamKesz}" />
+                            <TextBlock Style="{StaticResource TextBlockStyleMid}"
+                                       Text="/" />
+                            <TextBlock Margin="0,0,10,0"
+                                       Foreground="{Binding DarabOsszesenSzin}"
+                                       Style="{StaticResource TextBlockStyleMid}"
+                                       Text="{Binding FeladatDarabszamOsszes}" />
+                            <TextBlock Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="Terület:" />
+                            <TextBlock Foreground="{Binding TeruletSzin}"
+                                       Style="{StaticResource TextBlockStyleMid}"
+                                       Text="{Binding TeruletKesz}" />
+                            <TextBlock Style="{StaticResource TextBlockStyleMid}"
+                                       Text="/" />
+                            <TextBlock Margin="0,0,10,0"
+                                       Foreground="{Binding TeruletOsszesenSzin}"
+                                       Style="{StaticResource TextBlockStyleMid}"
+                                       Text="{Binding TeruletOsszes}" />
+                        </StackPanel>
+                    </Grid>
+
+
+                </Expander.Header>
+                <ggcuc:MultiListView x:Name="GallyFeladatList"
+                                     Margin="0"
+                                     HorizontalContentAlignment="Stretch"
+                                     BorderThickness="0"
+                                     IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMegosztottMunkaleszamolasAktiv, UpdateSourceTrigger=PropertyChanged}"
+                                     ItemContainerStyle="{StaticResource BaseListViewWithCheckboxItemStyle}"
+                                     ItemTemplate="{StaticResource GallyazasDataTemplate}"
+                                     ItemsSource="{Binding GallyazasiFeladatok}"
+                                     SelectedValue="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}, AncestorLevel=3}, Path=DataContext.KivalasztottGallyazasiFeladat, UpdateSourceTrigger=PropertyChanged}"
+                                     SelectionChanged="GallyFeladatList_SelectionChanged"
+                                     SelectionMode="Extended"
+                                     Style="{StaticResource AdatlapPanelListViewStyle}" />
+            </Expander>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel>
+            <ListView x:Name="GallyTipusList"
+                      Margin="0"
+                      HorizontalContentAlignment="Stretch"
+                      BorderThickness="0"
+                      ItemContainerStyle="{StaticResource AdatlapPanelListViewItemStyle}"
+                      ItemTemplate="{StaticResource GallyazasExpanderTemplate}"
+                      ItemsSource="{Binding GallyazasiFeladatTipusok}"
+                      Style="{StaticResource AdatlapPanelListViewStyle}" />
+
+            <TextBlock HorizontalAlignment="Left"
+                       Style="{DynamicResource TextBlockStyleCimke}"
+                       Text="{lex:Loc EllenoriMegjegyzes}"
+                       Visibility="{Binding GallyazasMegjegyzesVisibility}" />
+            <TextBox Height="70"
+                     Margin="10,4,4,0"
+                     VerticalContentAlignment="Top"
+                     AcceptsReturn="True"
+                     IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMegosztottMunkaleszamolasAktiv, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="1024"
+                     Text="{Binding Munkautasitas.GallyazasEllenorzesMegjegyzes}"
+                     TextWrapping="Wrap"
+                     Visibility="{Binding GallyazasMegjegyzesVisibility}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

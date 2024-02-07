@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.FeladatPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Geometria.MirtuszMobil.Client.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:local="clr-namespace:Geometria.MirtuszMobil.Client.AdatlapViews"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+             lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+    <!--  Feladat  -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Kategória Címke  -->
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="{StaticResource CimkeMargin}"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc FeladatLeiras}" />
+
+        <!--  Feladat  -->
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   Margin="{StaticResource ElemMargin}"
+                   HorizontalAlignment="Left"
+                   FontWeight="Bold"
+                   Style="{StaticResource TextBlockStyleBig}"
+                   Text="{Binding Munkautasitas.ElemiMunkaAdatai.NormaTevekenysegAzonosito, Converter={StaticResource NormaTevekenysegConverter}}" />
+
+
+        <WrapPanel Grid.Row="2"
+                   Grid.Column="0"
+                   Margin="{StaticResource ElemMargin}"
+                   Orientation="Horizontal">
+            <!--  Cím - Város  -->
+            <TextBlock HorizontalAlignment="Left"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.Telepules}" />
+
+            <!--  Cím - Pontos  -->
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.Utca}" />
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.Hazszam}" />
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.EmeletAjto}" />
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{lex:Loc HrszZarojellel}"
+                       Visibility="{Binding Munkautasitas.ElemiKozterAdat.Hrsz, Converter={StaticResource StringConverter}}" />
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.Hrsz}" />
+            <TextBlock HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text=")"
+                       Visibility="{Binding Munkautasitas.ElemiKozterAdat.Hrsz, Converter={StaticResource StringConverter}}" />
+            <TextBlock Margin="10,0,0,0"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.CimKiegeszites}"
+                       TextWrapping="Wrap" />
+            <TextBlock Margin="10,0,0,0"
+                       Foreground="{StaticResource FeliratSzinMasodlagos}"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding Munkautasitas.ElemiKozterAdat.Kulterulet, Converter={StaticResource KulteruletConverter}}" />
+        </WrapPanel>
+
+        <!--  Munkaszám  -->
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   Margin="{StaticResource ElemMargin}"
+                   HorizontalAlignment="Left"
+                   Style="{StaticResource TextBlockStyleMid}"
+                   Text="{Binding Munkautasitas.Munkaszam}" />
+
+        <!--  Munka koordinátája  -->
+        <StackPanel Grid.Row="5"
+                    Grid.Column="0"
+                    Margin="0,10,0,0"
+                    Orientation="Vertical">
+
+            <TextBlock Grid.ColumnSpan="2"
+                       Margin="{StaticResource CimkeMargin}"
+                       Style="{DynamicResource TextBlockStyleCimke}"
+                       Text="{lex:Loc KoordinataCimke}" />
+
+            <TextBlock Grid.Row="1"
+                       Grid.ColumnSpan="2"
+                       MaxHeight="300"
+                       Margin="{StaticResource ElemMargin}"
+                       VerticalAlignment="Stretch"
+                       Style="{StaticResource TextBlockStyleMid}"
+                       Text="{Binding MunkaWGSCoords, TargetNullValue=-, UpdateSourceTrigger=PropertyChanged}"
+                       TextWrapping="Wrap" />
+
+            <!--  Munka megjegyzés  -->
+            <StackPanel Grid.Row="4"
+                        Grid.Column="0"
+                        Margin="0,10,0,0"
+                        Orientation="Vertical">
+
+                <TextBlock Grid.ColumnSpan="2"
+                           Margin="{StaticResource CimkeMargin}"
+                           Style="{DynamicResource TextBlockStyleCimke}"
+                           Text="{lex:Loc Megjegyzes2}" />
+
+                <TextBlock Grid.Row="1"
+                           Grid.ColumnSpan="2"
+                           MaxHeight="300"
+                           Margin="{StaticResource ElemMargin}"
+                           VerticalAlignment="Stretch"
+                           Style="{StaticResource TextBlockStyleMid}"
+                           Text="{Binding Munkautasitas.ElemiMunkaAdatai.ElemiMunkaMegjegyzes, TargetNullValue=-}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

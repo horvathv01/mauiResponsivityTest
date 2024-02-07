@@ -1,0 +1,810 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.JegyzokonyvPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:Geometria.MirtuszMobil.Client.Controls"
+             xmlns:ggcuc="clr-namespace:Geometria.GeoMobil.Client.UI.Controls;assembly=Geometria.GeoMobil.Client.UI" 
+             xmlns:gmcco="clr-namespace:Geometria.MirtuszMobil.Common.Converters;assembly=Geometria.MirtuszMobil.Common" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helper="clr-namespace:Geometria.MirtuszMobil.Client.HelperClasses"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:statuszFSM="clr-namespace:Geometria.MirtuszMobil.Client.StatuszFSM"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+             lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             UseLayoutRounding="True"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Geometria.GeoMobil.Client.UI;component/Skins/Icons.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <gmcco:CsatolasParameterMultiConverter x:Key="CsatolasParameterMultiConverter" />
+
+        <!--  ========== Bizonyíték Template ==========  -->
+            <DataTemplate x:Key="BizonyitekTemplate">
+                <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="0.5*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!--  Típus  -->
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Margin="{StaticResource JegyzokonyvBizonyitekCimkeMargin}"
+                               Style="{StaticResource TextBlockStyleCimke}"
+                               Text="{lex:Loc Tipus}" />
+                    <ComboBox Grid.Row="1"
+                              Grid.Column="0"
+                              Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                              HorizontalAlignment="Left"
+                              DisplayMemberPath="Megnevezes"
+                              ItemsSource="{Binding BizTipusOpciok, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValue="{Binding KoTipusAzon, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValuePath="Azonosito">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding Path=DataContext.BizTipusChangedEventCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}, UpdateSourceTrigger=PropertyChanged}"
+                                                       CommandParameter="{Binding}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+
+                    <!--  Vonalkód  -->
+                    <!--
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="1"
+                               Margin="{StaticResource JegyzokonyvBizonyitekCimkeMargin}"
+                               Style="{StaticResource TextBlockStyleCimke}"
+                               Text="{lex:Loc Vonalkod}" />
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             Height="{StaticResource TextBoxHeight}"
+                             Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                             Text="{Binding Vonalkod}" />-->
+
+                <!--  Gyári szám (berendezés ISU azonosítója)  -->
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="{StaticResource JegyzokonyvBizonyitekCimkeMargin}"
+                           Style="{StaticResource TextBlockStyleCimke}"
+                           Text="{lex:Loc ISUAzonColumnHeader}"
+                           Visibility="{Binding IsBerendezes, Converter={StaticResource BoolConverter}}" />
+                <ComboBox Grid.Row="1"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                          HorizontalAlignment="Left"
+                          ItemsSource="{Binding BizIsuAzonOpciok, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValue="{Binding IsuAzon}"
+                          Visibility="{Binding IsBerendezes, Converter={StaticResource BoolConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=DataContext.BizIsuAzonChangedEventCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}, UpdateSourceTrigger=PropertyChanged}"
+                                                   CommandParameter="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+
+                    <!--  Megjegyzés  -->
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Margin="3,0,2,-10"
+                               Style="{StaticResource TextBlockStyleCimke}"
+                               Text="{lex:Loc Megjegyzes2}" />
+                    <TextBox Grid.Row="3"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="3"
+                             Height="{StaticResource TextBoxHeight}"
+                             Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                             Text="{Binding Megjegyzes}" />
+
+                    <!--  Doboz elem töröl gomb  -->
+                    <ggcuc:IconButton Grid.Row="3"
+                                         Grid.Column="3"
+                                         Width="{StaticResource IconButtonSizeSmallNextToTextBox}"
+                                         Margin="0,0,0,0"
+                                         VerticalAlignment="Center"
+                                         Background="{StaticResource GeometriaSecondaryColorRed}"
+                                         Command="{Binding DataContext.BizonyitekTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=2}}"
+                                         Icon="{StaticResource IconTorles}"
+                                         IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                         Style="{StaticResource IconButtonStyle}">
+                        <ggcuc:IconButton.CommandParameter>
+                            <MultiBinding Converter="{StaticResource CommandParameterConverter}">
+                                <Binding Path="DataContext"
+                                         RelativeSource="{RelativeSource Self}" />
+                                <Binding Path="DataContext"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,
+                                                                         AncestorType={x:Type ListViewItem},
+                                                                         AncestorLevel=2}" />
+                            </MultiBinding>
+                        </ggcuc:IconButton.CommandParameter>
+                    </ggcuc:IconButton>
+
+                </Grid>
+            </DataTemplate>
+
+            <!--  ========== Doboz Template ==========  -->
+            <DataTemplate x:Key="DobozTemplate">
+                <Border Padding="5,0,5,0"
+                        BorderThickness="0,0,5,0">
+                    <Expander x:Name="PackageExpander"
+                              Margin="0,10,0,1"
+                              Padding="10,0,10,0"
+                              HorizontalAlignment="Stretch"
+                              Background="Transparent"
+                              Style="{StaticResource DobozExpanderStyle}">
+                        <Expander.Header>
+                            <Grid MinHeight="40"
+                                  Margin="20,0,5,5"
+                                  IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--  Doboz fő tulajdonságok  -->
+                                <WrapPanel Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           Orientation="Horizontal">
+
+                                    <!--  Doboz zárt icon  -->
+                                    <Canvas x:Name="PackageClosedIcon"
+                                            Grid.Column="1"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="-5,0,-2,0"
+                                            VerticalAlignment="Center">
+                                        <Canvas.Visibility>
+                                            <Binding Converter="{StaticResource BoolConverter}"
+                                                     ConverterParameter="not"
+                                                     Path="IsExpanded"
+                                                     RelativeSource="{RelativeSource AncestorType={x:Type Expander}}" />
+                                        </Canvas.Visibility>
+                                        <Viewbox Canvas.Left="-7"
+                                                 Canvas.Top="-5"
+                                                 Height="20">
+                                            <Path Data="m 72.250001 59.875042 c 0 1.045 -0.5775 1.9525 -1.4575 2.42 L 49.067497 74.505041 c -0.44 0.33 -0.99 0.495 -1.5675 0.495 -0.5775 0 -1.1275 -0.165 -1.5675 -0.495 L 24.207498 62.295042 c -0.88 -0.4675 -1.4575 -1.375 -1.4575 -2.42 V 35.12504 c 0 -1.045 0.5775 -1.9525 1.4575 -2.42 L 45.932497 20.495041 c 0.44 -0.33 0.99 -0.495 1.5675 -0.495 0.5775 0 1.1275 0.165 1.567501 0.495 L 70.792501 32.70504 c 0.88 0.4675 1.4575 1.375 1.4575 2.42 V 59.875042 M 47.499997 25.91254 l -5.1975 2.942501 16.197505 9.322499 5.389999 -3.0525 -16.390004 -9.2125 m -16.389999 9.2125 16.389999 9.2125 5.389999 -3.025 -16.169999 -9.35 -5.609999 3.1625 m -2.86 23.127502 16.499999 9.294999 V 49.095042 L 28.249998 39.82754 v 18.425002 m 38.500003 0 V 39.82754 l -16.500004 9.267502 v 18.452499 z"
+                                                  Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Stretch="Fill">
+                                                <Path.RenderTransform>
+                                                    <ScaleTransform ScaleX="1.5"
+                                                                    ScaleY="1.5" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Viewbox>
+                                    </Canvas>
+
+                                    <!--  Doboz nyitott icon  -->
+                                    <Canvas x:Name="PackageOpenedIcon"
+                                            Grid.Column="1"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="-7,0,0,0"
+                                            VerticalAlignment="Center">
+                                        <Canvas.Visibility>
+                                            <Binding Converter="{StaticResource BoolConverter}"
+                                                     Path="IsExpanded"
+                                                     RelativeSource="{RelativeSource AncestorType={x:Type Expander}}" />
+                                        </Canvas.Visibility>
+                                        <Viewbox Canvas.Left="-7"
+                                                 Canvas.Top="-5"
+                                                 Height="20">
+                                            <Path Data="m 20.019336 44.640041 c -1.375 -0.77 -1.7875 -2.4475 -1.0175 -3.7675 l 4.125 -7.1225 c 0.3025 -0.55 0.77 -0.935 1.2925 -1.155 l 21.5325 -12.1 c 0.44 -0.33 0.99 -0.495 1.5675 -0.495 0.5775 0 1.1275 0.165 1.5675 0.495 l 21.725 12.21 c 0.5225 0.275 0.9625 0.715 1.21 1.265 l 3.9875 6.93 c 0.77 1.32 0.3025 2.9975 -0.99 3.74 l -2.75 1.595 v 13.64 c 0 1.045 -0.5775 1.9525 -1.4575 2.42 l -21.725 12.21 c -0.44 0.33 -0.99 0.495 -1.5675 0.495 -0.5775 0 -1.1275 -0.165 -1.5675 -0.495 l -21.725 -12.21 c -0.88 -0.4675 -1.4575 -1.375 -1.4575 -2.42 v -15.235 c -0.825 0.4675 -1.87 0.495 -2.75 0 m 27.5 -18.7275 v 0 18.425 0 l 16.39 -9.2125 -16.39 -9.2125 m -19.25 32.34 16.5 9.295 v -18.4525 l -16.5 -9.2675 v 18.425 m 38.5 0 v -8.855 l -13.75 7.975 c -0.9075 0.495 -1.925 0.4675 -2.75 0.0275 v 10.1475 l 16.5 -9.295 m -14.1625 -7.0125 17.27 -9.9825 -1.595 -2.7775 -17.27 9.9825 z"
+                                                  Fill="{StaticResource GeometriaPrimaryColorGreen}"
+                                                  Stretch="Fill">
+                                                <Path.RenderTransform>
+                                                    <ScaleTransform ScaleX="1.5"
+                                                                    ScaleY="1.5" />
+                                                </Path.RenderTransform>
+                                            </Path>
+                                        </Viewbox>
+                                    </Canvas>
+
+                                    <TextBlock Grid.Column="0"
+                                               Margin="20,0,10,0"
+                                               HorizontalAlignment="Left"
+                                               Style="{StaticResource TextBlockStyleMid}"
+                                               Text="{Binding Sorszam}" />
+                                    <TextBlock Grid.Column="0"
+                                               Margin="10,0,10,0"
+                                               HorizontalAlignment="Left"
+                                               Style="{StaticResource TextBlockStyleMid}"
+                                               Text="{lex:Loc Doboz}" />
+
+                                <!--  A doboz valódi vonalkódja  -->
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding Vonalkod}"
+                                           Visibility="{Binding VonalkodIsVisible, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" />
+                                <!--  A dobozban szereplő, legelső mérő vagy hkv gyáriszáma  -->
+                                <TextBlock Grid.Column="2"
+                                           Margin="10,0,10,0"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockStyleMid}"
+                                           Text="{Binding BizIsuAzonToVonalkod}"
+                                           Visibility="{Binding VonalkodIsVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </WrapPanel>
+
+                                <!--  Gombok  -->
+                                <WrapPanel Grid.Column="3"
+                                           Margin="0,-15,0,-15"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Orientation="Horizontal">
+
+                                    <!--  Új bizonyíték felvétel gomb  -->
+                                    <ggcuc:IconButton Grid.Column="0"
+                                                         Width="{StaticResource IconButtonSizeSmall}"
+                                                         Margin="5,0"
+                                                         Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                         Click="AddBizonyitekButton_Click"
+                                                         Command="{Binding DataContext.BizonyitekHozzaadCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                         Icon="{StaticResource IconInstall}"
+                                                         IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                         Style="{StaticResource IconButtonStyle}" />
+
+                                    <!--  Törlés gomb  -->
+                                    <ggcuc:IconButton Width="{StaticResource IconButtonSizeSmall}"
+                                                         Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                         Command="{Binding DataContext.DobozTorolCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                         Icon="{StaticResource IconTorles}"
+                                                         IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                         Style="{StaticResource IconButtonStyle}" />
+
+                                </WrapPanel>
+
+                        </Grid>
+                    </Expander.Header>
+                    <Grid IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!--  =============== 1. sor ===============  -->
+                        <!--  Vonalkód  -->
+                        <TextBlock Grid.Row="0"
+                                   Grid.Column="0"
+                                   Margin="{StaticResource JegyzokonyvBizonyitekCimkeMargin}"
+                                   Style="{StaticResource TextBlockStyleCimke}"
+                                   Text="{lex:Loc Azonosito}" />
+                        <!--  A doboz valódi vonalkódja  -->
+                        <!--
+                            Ez az adornerDecorator a validáció miatt kell ide,
+                            e nélkül, az első inicializálás alkalmával nem tölti be az error textet
+                        -->
+                        <AdornerDecorator Grid.Row="1"
+                                          Grid.Column="0">
+                            <TextBox Height="{StaticResource TextBoxHeight}"
+                                     Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                                     IsReadOnly="{Binding IsVonalkodTorlesVisible, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding VonalkodIsVisible, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.Text>
+                                    <Binding Mode="TwoWay"
+                                             NotifyOnValidationError="True"
+                                             Path="Vonalkod"
+                                             UpdateSourceTrigger="PropertyChanged"
+                                             ValidatesOnDataErrors="True">
+                                        <Binding.ValidationRules>
+                                            <helper:RequiredFieldValidationRule JegyzokonyvDobozVonalkod="True"
+                                                                                ValidatesOnTargetUpdated="True"
+                                                                                ValidationStep="UpdatedValue" />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                <controls:WatermarkService.Watermark>
+                                    <TextBlock IsEnabled="True"
+                                               Style="{StaticResource TextBlockWatermarkStyleMid}"
+                                               Text="Használd a vonalkód olvasót!" />
+                                </controls:WatermarkService.Watermark>
+                            </TextBox>
+                        </AdornerDecorator>
+                        <!--  A dobozban szereplő, legelső mérő vagy hkv gyáriszáma  -->
+                        <TextBox Grid.Row="1"
+                                 Grid.Column="0"
+                                 Height="{StaticResource TextBoxHeight}"
+                                 Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                                 IsReadOnly="{Binding VonalkodIsVisible, UpdateSourceTrigger=PropertyChanged}"
+                                 Text="{Binding BizIsuAzonToVonalkod}"
+                                 Visibility="{Binding VonalkodIsVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!--  Kézi vonalkód kiválasztás a raktárból gomb  -->
+                            <ggcuc:IconButton Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 Width="{StaticResource IconButtonSizeSmallNextToTextBox}"
+                                                 Margin="0,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                 Command="{Binding DataContext.KeziVonalkodFelszerelesCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                 Icon="{StaticResource IconBarcodeSearch}"
+                                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                 Style="{StaticResource IconButtonStyle}"
+                                                 Visibility="{Binding IsKeziVonalkodHozzaadasVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Automatikus vonalkód felszerelés raktárból nyugtázása gomb  -->
+                            <ggcuc:IconButton Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 Width="{StaticResource IconButtonSizeSmallNextToTextBox}"
+                                                 Margin="0,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                                 Command="{Binding DataContext.AutomatikusVonalkodFelszerelesCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                 Icon="{StaticResource CheckIcon}"
+                                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                 Style="{StaticResource IconButtonStyle}"
+                                                 Visibility="{Binding IsAutoVonalkodHozzaadasVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Vonalkód törlés gomb  -->
+                            <ggcuc:IconButton Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 Width="{StaticResource IconButtonSizeSmallNextToTextBox}"
+                                                 Margin="0,0,0,0"
+                                                 VerticalAlignment="Center"
+                                                 Background="{StaticResource GeometriaSecondaryColorRed}"
+                                                 Command="{Binding DataContext.VonalkodLeszerelesCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}, AncestorLevel=1}}"
+                                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=DataContext}"
+                                                 Icon="{StaticResource IconTorles}"
+                                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                                 Style="{StaticResource IconButtonStyle}"
+                                                 Visibility="{Binding IsVonalkodTorlesVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!--  A vonalkód alapján megtalált raktári anyag  -->
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="2"
+                                       Margin="{StaticResource JegyzokonyvBizonyitekCimkeMargin}"
+                                       Style="{StaticResource TextBlockStyleCimke}"
+                                       Text="{lex:Loc JegyzkKapcsRaktAnyagTulaj}"
+                                       Visibility="{Binding IsAutoVonalkodHozzaadasVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="2"
+                                     Height="{StaticResource TextBoxHeight}"
+                                     Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                                     IsReadOnly="True"
+                                     Text="{Binding FoundRaktariAnyagTulajdonsagok, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding IsAutoVonalkodHozzaadasVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!--  Hibás vonalkód esetén megjelenő hibaüzenet  -->
+                            <TextBox Grid.Row="1"
+                                     Grid.Column="2"
+                                     Height="{StaticResource TextBoxHeight}"
+                                     Margin="{StaticResource JegyzokonyvBizonyitekFieldMargin}"
+                                     Foreground="{StaticResource GeometriaSecondaryColorRed}"
+                                     IsReadOnly="True"
+                                     Text="{Binding HibasVonalkodMessage, UpdateSourceTrigger=PropertyChanged}"
+                                     Visibility="{Binding IsHibasVonalkodMessageVisible, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <!--  =============== 2. sor ===============  -->
+                            <!--  Bizonyíték lista címke  -->
+                            <TextBlock Grid.Row="3"
+                                       Grid.Column="0"
+                                       Margin="5,20,0,0"
+                                       Style="{StaticResource TextBlockStyleMid}"
+                                       Text="{lex:Loc JegyzkBizonyitekok}"
+                                       Visibility="{Binding Bizonyitekok.Count, Converter={StaticResource Count0Converter}}" />
+
+                            <!--  =============== 3. sor ===============  -->
+                            <Grid Grid.Row="4"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3"
+                                  Margin="0,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="3.5*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+
+                                <!--  Bizonyíték lista  -->
+                                <ListView x:Name="BizonyitekList"
+                                          Grid.Row="4"
+                                          Grid.Column="0"
+                                          Grid.ColumnSpan="6"
+                                          Margin="0"
+                                          HorizontalContentAlignment="Stretch"
+                                          ItemContainerStyle="{StaticResource BizonyitekListViewItemStyle}"
+                                          ItemTemplate="{StaticResource BizonyitekTemplate}"
+                                          ItemsSource="{Binding Bizonyitekok}"
+                                          ScrollViewer.CanContentScroll="True"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          Style="{StaticResource AdatlapPanelListViewStyle}" />
+                            </Grid>
+
+                        </Grid>
+                    </Expander>
+                </Border>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Sorszám  -->
+        <TextBlock Grid.Row="0"
+                   Margin="{StaticResource FieldCimkeMargin}"
+                   Style="{StaticResource TextBlockStyleCimke}"
+                   Text="{lex:Loc Sorszam}" />
+        <!--
+            Ez az adornerDecorator a validáció miatt kell ide,
+            e nélkül, az első inicializálás alkalmával nem tölti be az error textet
+        -->
+        <AdornerDecorator Grid.Row="1">
+            <TextBox Width="150"
+                     Height="{StaticResource TextBoxHeight}"
+                     Margin="{StaticResource FieldMargin}"
+                     HorizontalAlignment="Left"
+                     IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                     IsReadOnly="{Binding Munkautasitas.Jegyzokonyv.IsAnyFenykep}"
+                     MaxLength="7">
+                <TextBox.Text>
+                    <Binding Mode="TwoWay"
+                             NotifyOnValidationError="True"
+                             Path="Munkautasitas.Jegyzokonyv.Sorszam"
+                             UpdateSourceTrigger="PropertyChanged"
+                             ValidatesOnDataErrors="True">
+                        <Binding.ValidationRules>
+                            <helper:RequiredFieldValidationRule JegyzokonyvSorszam="True"
+                                                                ValidatesOnTargetUpdated="True"
+                                                                ValidationStep="UpdatedValue" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+        </AdornerDecorator>
+
+        <!--  Doboz lista  -->
+        <ListView x:Name="DobozList"
+                  Grid.Row="2"
+                  Margin="-5"
+                  HorizontalContentAlignment="Stretch"
+                  ItemContainerStyle="{StaticResource MeroberendezesListViewItemStyle}"
+                  ItemTemplate="{StaticResource DobozTemplate}"
+                  ItemsSource="{Binding Munkautasitas.Jegyzokonyv.Dobozok}"
+                  ScrollViewer.CanContentScroll="True"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Style="{StaticResource AdatlapPanelListViewStyle}" />
+
+        <!--  Új doboz hozzáadás  -->
+        <Button Grid.Row="3"
+                Width="200"
+                Height="50"
+                Margin="0,20,0,20"
+                Padding="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding DobozFelveszCommand}"
+                Content="{lex:Loc UjDoboz}"
+                IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}" />
+
+
+        <!--  1. Fénykép  -->
+        <TextBlock Grid.Row="4"
+                   Margin="10,10,0,0"
+                   HorizontalAlignment="Left"
+                   Style="{StaticResource TextBlockStyleCimke}"
+                   Text="{lex:Loc Fenykepek}" />
+
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!--  1. Fénykép  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="{StaticResource FieldCimkeMargin}"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleCimke}"
+                       Text="{lex:Loc ElsoOldal}" />
+            <!--  1. Fénykép csatolás  -->
+            <ggcuc:IconButton Grid.Row="1"
+                                 Grid.Column="0"
+                                 Width="50"
+                                 Margin="5,5,5,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                 Command="{Binding FenykepCsatolasCommand}"
+                                 Icon="{StaticResource IconAddPhoto}"
+                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                 Style="{StaticResource IconButtonStyle}"
+                                 Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep1, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" >
+                <ggcuc:IconButton.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                        <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                        <Binding>
+                            <Binding.Source>
+                                <System:String>1</System:String>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </ggcuc:IconButton.CommandParameter>
+            </ggcuc:IconButton>
+            <Button x:Name="Feknykep1Button"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding FenykepMegnyitoCommand}"
+                    CommandParameter="{Binding Munkautasitas.Jegyzokonyv.Fenykep1}"
+                    Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep1, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding Munkautasitas.Jegyzokonyv.Fenykep1.LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+            </Button>
+
+            <!--  2. Fénykép  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="1"
+                       Margin="{StaticResource FieldCimkeMargin}"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleCimke}"
+                       Text="{lex:Loc MasodikOldal}" />
+            <!--  2. Fénykép csatolás  -->
+            <ggcuc:IconButton Grid.Row="1"
+                                 Grid.Column="1"
+                                 Width="50"
+                                 Margin="5,5,5,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                 Command="{Binding FenykepCsatolasCommand}"
+                                 Icon="{StaticResource IconAddPhoto}"
+                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                 Style="{StaticResource IconButtonStyle}"
+                                 Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep2, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" >
+                <ggcuc:IconButton.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                        <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                        <Binding>
+                            <Binding.Source>
+                                <System:String>2</System:String>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </ggcuc:IconButton.CommandParameter>
+            </ggcuc:IconButton>
+            <Button x:Name="Feknykep2Button"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding FenykepMegnyitoCommand}"
+                    CommandParameter="{Binding Munkautasitas.Jegyzokonyv.Fenykep2}"
+                    Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep2, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding Munkautasitas.Jegyzokonyv.Fenykep2.LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+            </Button>
+
+            <!--  3. Fénykép  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="2"
+                       Margin="{StaticResource FieldCimkeMargin}"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleCimke}"
+                       Text="{lex:Loc HarmadikOldal}" />
+            <!--  3. Fénykép csatolás  -->
+            <ggcuc:IconButton Grid.Row="1"
+                                 Grid.Column="2"
+                                 Width="50"
+                                 Margin="5,5,5,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                 Command="{Binding FenykepCsatolasCommand}"
+                                 Icon="{StaticResource IconAddPhoto}"
+                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                 Style="{StaticResource IconButtonStyle}"
+                                 Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep3, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" >
+                <ggcuc:IconButton.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                        <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                        <Binding>
+                            <Binding.Source>
+                                <System:String>3</System:String>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </ggcuc:IconButton.CommandParameter>
+            </ggcuc:IconButton>
+
+            <Button x:Name="Feknykep3Button"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding FenykepMegnyitoCommand}"
+                    CommandParameter="{Binding Munkautasitas.Jegyzokonyv.Fenykep3}"
+                    Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep3, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding Munkautasitas.Jegyzokonyv.Fenykep3.LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+            </Button>
+
+            <!--  4. Fénykép  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="3"
+                       Margin="{StaticResource FieldCimkeMargin}"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleCimke}"
+                       Text="{lex:Loc NegyedikOldal}" />
+            <!--  4. Fénykép csatolás  -->
+            <ggcuc:IconButton Grid.Row="1"
+                                 Grid.Column="3"
+                                 Width="50"
+                                 Margin="5,5,5,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                 Command="{Binding FenykepCsatolasCommand}"
+                                 Icon="{StaticResource IconAddPhoto}"
+                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                 Style="{StaticResource IconButtonStyle}"
+                                 Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep4, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" >
+                <ggcuc:IconButton.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                        <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                        <Binding>
+                            <Binding.Source>
+                                <System:String>4</System:String>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </ggcuc:IconButton.CommandParameter>
+            </ggcuc:IconButton>
+
+            <Button x:Name="Feknykep4Button"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding FenykepMegnyitoCommand}"
+                    CommandParameter="{Binding Munkautasitas.Jegyzokonyv.Fenykep4}"
+                    Visibility="{Binding Munkautasitas.Jegyzokonyv.IsFenykep4, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding Munkautasitas.Jegyzokonyv.Fenykep4.LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+            </Button>
+
+        </Grid>
+
+        <!--  Tájékoztató Lap Fénykép  -->
+        <Grid Grid.Row="6"
+              Visibility="{Binding Munkautasitas.Jegyzokonyv.IsTajekoztatoLap, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  Tájékoztató Lap Fénykép címke  -->
+            <TextBlock Grid.Row="0"
+                       Grid.Column="3"
+                       Margin="{StaticResource FieldCimkeMargin}"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TextBlockStyleCimke}"
+                       Text="{lex:Loc JegyzkTajLapCimke}" />
+
+            <!--  Tájékoztató Lap Fénykép csatolás  -->
+            <ggcuc:IconButton Grid.Row="1"
+                                 Grid.Column="3"
+                                 Width="50"
+                                 Margin="5,5,5,0"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaPrimaryColorGreen}"
+                                 Command="{Binding FenykepCsatolasCommand}"
+                                 Icon="{StaticResource IconAddPhoto}"
+                                 IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMunkautasitasSzerkesztheto}"
+                                 Style="{StaticResource IconButtonStyle}"
+                                 Visibility="{Binding Munkautasitas.Jegyzokonyv.IsTajekoztatoLapCsatolva, Converter={StaticResource BoolConverter}, ConverterParameter=not, UpdateSourceTrigger=PropertyChanged}" >
+                <ggcuc:IconButton.CommandParameter>
+                    <MultiBinding Converter="{StaticResource CsatolasParameterMultiConverter}">
+                        <Binding Path="." RelativeSource="{RelativeSource Self}" />
+                        <Binding>
+                            <Binding.Source>
+                                <System:String>TajekoztatoLap</System:String>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </ggcuc:IconButton.CommandParameter>
+            </ggcuc:IconButton>
+
+
+            <!--  Tájékoztató Lap Fénykép megnyitás  -->
+            <Button x:Name="TajekoztatoLapFenykepButton"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    MaxWidth="120"
+                    MaxHeight="120"
+                    Padding="0"
+                    Command="{Binding FenykepMegnyitoCommand}"
+                    CommandParameter="{Binding Munkautasitas.Jegyzokonyv.TajekoztatoLap}"
+                    Visibility="{Binding Munkautasitas.Jegyzokonyv.IsTajekoztatoLapCsatolva, Converter={StaticResource BoolConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Image MaxWidth="100"
+                           MaxHeight="100"
+                           Source="{Binding Munkautasitas.Jegyzokonyv.TajekoztatoLap.LocalPath, Converter={StaticResource ThumbnailConverter}, IsAsync=True}"
+                           Stretch="Uniform" />
+                </Border>
+            </Button>
+        </Grid>
+
+    </Grid>
+</UserControl>

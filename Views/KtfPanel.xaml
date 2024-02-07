@@ -1,0 +1,149 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.KtfPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:ggcuc="clr-namespace:Geometria.GeoMobil.Client.UI.Controls;assembly=Geometria.GeoMobil.Client.UI" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:helper="clr-namespace:Geometria.MirtuszMobil.Client.HelperClasses"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:local="clr-namespace:Geometria.MirtuszMobil.Client.AdatlapViews"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:statuszFSM="clr-namespace:Geometria.MirtuszMobil.Client.StatuszFSM"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             lex:LocalizeDictionary.DesignCulture="en"
+             lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+             lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             mc:Ignorable="d">
+
+    <Grid Background="{DynamicResource DialogHatter}"
+          IsEnabled="{Binding Source={x:Static statuszFSM:StatuszManager.Instance}, Path=IsMegosztottMunkaleszamolasAktiv, UpdateSourceTrigger=PropertyChanged}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Margin="5,30,0,0"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc Terv}" />
+
+        <TextBox Grid.Row="1"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 Margin="5,3,5,2"
+                 IsReadOnly="True"
+                 Text="{Binding KtfTerv.MEGNEVEZES}" />
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Margin="5,30,0,0"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc Teny}" />
+
+        <ComboBox Grid.Row="3"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="5,3,5,2"
+                  DisplayMemberPath="MEGNEVEZES"
+                  IsEnabled="{Binding IsKtfTenyEnabled}"
+                  IsSynchronizedWithCurrentItem="True"
+                  ItemsSource="{Binding KtfLista, Mode=TwoWay}"
+                  SelectedValuePath="AZONOSITO">
+            <ComboBox.SelectedValue>
+                <Binding Delay="10"
+                         Mode="TwoWay"
+                         NotifyOnValidationError="True"
+                         Path="KtfTeny"
+                         UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <helper:RequiredFieldValidationRule ComboBox="True"
+                                                            ValidatesOnTargetUpdated="True"
+                                                            ValidationStep="RawProposedValue" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.SelectedValue>
+        </ComboBox>
+
+
+        <TextBlock Grid.Row="4"
+                   Grid.Column="0"
+                   Margin="5,30,0,0"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc Normatevekenyseg}" />
+
+        <ComboBox Grid.Row="5"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
+                  Margin="5,3,5,2"
+                  DisplayMemberPath="Megnevezes"
+                  ItemsSource="{Binding Normatevekenysegek, Mode=TwoWay}"
+                  SelectedValuePath="Azonosito">
+            <ComboBox.SelectedValue>
+                <Binding Delay="10"
+                         NotifyOnValidationError="True"
+                         Path="Normatevekenyseg"
+                         TargetNullValue=""
+                         UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <helper:RequiredFieldValidationRule ComboBox="True"
+                                                            ValidatesOnTargetUpdated="True"
+                                                            ValidationStep="RawProposedValue" />
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.SelectedValue>
+        </ComboBox>
+
+        <TextBlock Grid.Row="6"
+                   Grid.Column="0"
+                   Margin="5,30,0,0"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc MunkamodszerTerv}" />
+
+        <TextBox Grid.Row="7"
+                 Grid.Column="0"
+                 Margin="5,3,5,2"
+                 IsReadOnly="True"
+                 Text="{Binding MunkamodszerTervMegnevezes, Mode=OneWay}" />
+
+        <TextBlock Grid.Row="6"
+                   Grid.Column="1"
+                   Margin="5,30,0,0"
+                   Style="{DynamicResource TextBlockStyleCimke}"
+                   Text="{lex:BLoc MunkaModszerTeny}" />
+        <Grid Grid.Row="7"
+              Grid.Column="1"
+              Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="50" />
+            </Grid.ColumnDefinitions>
+            <ComboBox Grid.Column="0"
+                      Margin="0,1,0,0"
+                      DisplayMemberPath="MEGNEVEZES"
+                      ItemsSource="{Binding Munkamodszerek, Mode=TwoWay}"
+                      SelectedValue="{Binding MunkamodszerTeny}"
+                      SelectedValuePath="AZONOSITO" />
+            <ggcuc:IconButton Grid.Column="1"
+                                 Width="35"
+                                 Margin="5,0"
+                                 VerticalAlignment="Center"
+                                 Background="{StaticResource GeometriaSecondaryColorRed}"
+                                 Command="{Binding MunkaModszerTorolCommand}"
+                                 Icon="{StaticResource IconTorles}"
+                                 Style="{StaticResource IconButtonStyle}" />
+        </Grid>
+    </Grid>
+</UserControl>

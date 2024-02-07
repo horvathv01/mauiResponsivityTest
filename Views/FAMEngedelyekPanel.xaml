@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="Geometria.MirtuszMobil.Client.AdatlapViews.FAMEngedelyekPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Geometria.MirtuszMobil.Client.AdatlapViews"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+                 lex:LocalizeDictionary.DesignCulture="en"
+                 lex:ResxLocalizationProvider.DefaultAssembly="Geometria.MirtuszMobil.Client"
+                 lex:ResxLocalizationProvider.DefaultDictionary="DisplayResources"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             UseLayoutRounding="True">
+    
+    <UserControl.Resources>
+        <DataTemplate x:Key="FAMEngedelyekDataTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Szerep Típusa -->
+                <TextBlock Grid.Column="0" Grid.Row="0"
+                           Text="{Binding FamEngedelyAzon, Converter={StaticResource FamEngedelySzerepConverter}}"
+                           Style="{StaticResource TextBlockStyleMid}"
+                           Margin="5,3,5,2" />
+                
+                <!-- Név -->
+                <TextBlock Grid.Column="1" Grid.Row="0"
+                           Text="{Binding DolgozoNeve}"
+                           Style="{StaticResource TextBlockStyleMid}"
+                           Margin="5,3,5,2" />
+
+                <!-- FAM KIF szintje -->
+                <TextBlock Grid.Column="2" Grid.Row="0"
+                           Text="{Binding FamSzintje}"
+                           Style="{StaticResource TextBlockStyleMid}"
+                           Margin="5,3,5,2" />
+                
+                <!-- Igazolvány száma -->
+                <TextBlock Grid.Column="3" Grid.Row="0"
+                           Text="{Binding IgazolványSzama}"
+                           Style="{StaticResource TextBlockStyleMid}"
+                           Margin="5,3,5,2" />
+                
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Visibility="{Binding IsFAMEngedelelyekListaLathato, Converter={StaticResource BoolConverter}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="0" Grid.Row="0"
+                   Text="{lex:BLoc SzerepTipusa}"
+                   Style="{StaticResource TextBlockStyleCimke}"
+                   Margin="{StaticResource CimkeMargin}" />
+
+        <TextBlock Grid.Column="1" Grid.Row="0"
+                   Text="{lex:BLoc Nev}"
+                   Style="{StaticResource TextBlockStyleCimke}"
+                   Margin="{StaticResource CimkeMargin}"/>
+
+        <TextBlock Grid.Column="2" Grid.Row="0"
+                   Text="{lex:BLoc FamKifSzintje}"
+                   Style="{StaticResource TextBlockStyleCimke}" />
+
+        <TextBlock Grid.Column="3" Grid.Row="0"
+                   Text="{lex:BLoc IgazolvanySzama}"
+                   Style="{StaticResource TextBlockStyleCimke}" />
+
+        <ListView Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"
+                  Style="{StaticResource AdatlapPanelListViewStyle}"
+                  ItemsSource="{Binding Munkautasitas.FamEngedelyek}"
+                  ItemTemplate="{StaticResource FAMEngedelyekDataTemplate}"
+                  ItemContainerStyle="{StaticResource AdatlapPanelListViewItemStyle}"
+                  HorizontalContentAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  BorderThickness="0" >
+
+        </ListView>
+    </Grid>
+    
+</UserControl>
