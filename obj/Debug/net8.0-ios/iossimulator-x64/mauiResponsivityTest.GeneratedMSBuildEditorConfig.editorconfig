@@ -46,6 +46,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Resou
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KitoltesView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KitoltesView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\KitoltesView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\KitoltesView.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KitoltesView2.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KitoltesView2.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\KitoltesView2.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\KitoltesView2.xaml
+
 [C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/MunkakView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.MunkakView.xaml

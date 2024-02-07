@@ -8,11 +8,17 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
+            <views:KitoltesView2/>
+
             <views:MunkakView/>
             <views:MunkakView/>
             <views:MunkakView/>
             <views:MunkakView/>
             <views:MunkakView/>
+            <views:MunkakView/>
+            <views:MunkakView/>
+            <views:MunkakView/>
+
         </VerticalStackLayout>
     </ScrollView>
 
