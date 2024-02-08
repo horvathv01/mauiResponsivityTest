@@ -7,12 +7,12 @@
         <Label 
         Text="Munka adatok"
         FontSize="20"
-        TextColor="LightGreen"
+        TextColor="LimeGreen"
         Margin="15"
         />
         <FlexLayout 
             x:Name="Layout1"
-            Background="DarkGray"
+            Background="White"
             JustifyContent="SpaceEvenly"
             Wrap="Wrap"
             Padding="15"
@@ -24,10 +24,12 @@
                 <Label
                 Text="Tervezett mennyiség"
                 FontSize="15"
+                TextColor="DimGray"
                 />
                 <Editor />
                 <Label
                 Text="Fogyasztó ellátva"
+                    TextColor="DimGray"
                 FontSize="15"
                 />
                 <Editor />
@@ -38,57 +40,60 @@
                 Margin="15"
             >
                 <Label
-                Text="Tényleges mennyiség"
-                FontSize="15"
+                    Text="Tényleges mennyiség"
+                    FontSize="15"
+                    TextColor="DimGray"
                 />
-                <Editor />
+                <Editor BackgroundColor="PaleGreen"/>
                 <Label 
-                Text="Kötelező mező"
-                FontSize="15"
-                TextColor="Red"
+                    Text="Töltsd ki a mezőt!"
+                    FontSize="12"
+                    TextColor="Red"
                 />
                 <Label
-                Text="FOGYASZTÓ ELLÁTVA"
-                FontAttributes="Bold"
-                FontSize="20"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
+                    Text="FOGYASZTÓ ELLÁTVA"
+                    Margin="15"
+                    TextColor="Gray"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
                 />
             </VerticalStackLayout>
 
         </FlexLayout>
-        <VerticalStackLayout
-            Margin="15"
-            >
+
+        <VerticalStackLayout>
             <Label 
                 Text="Diagnosztika űrlap csomagok és űrlapok"
                 FontSize="20"
-                TextColor="LightGreen"
+                TextColor="LimeGreen"
                 Margin="15"
                 />
             <Grid
-                Background="DarkGray"
+                Background="White"
                 >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Image 
-             x:Name="Icon"
-             Grid.Column="0"
-             Source="dotnet_bot.png"
-             Background="Yellow"
-             />
+                     x:Name="Icon"
+                     Grid.Column="0"
+                     Source="dotnet_bot.png"
+                     Background="Gold"
+                />
                 <VerticalStackLayout 
-             Margin="10"
-             Grid.Column="1">
+                     Margin="10"
+                     Grid.Column="1">
                     <Label 
-                 x:Name="Title"
-                 Text="Műszaki adatok űrlap"
-                 FontSize="16"
-                 FontAttributes="Bold"
-                 HorizontalOptions="Start" 
-                 />
+                         x:Name="Title"
+                        Margin="10"
+                         Text="Műszaki adatok űrlap"
+                         FontSize="16"
+                         FontAttributes="Bold"
+                         HorizontalOptions="Start" 
+                    />
                 </VerticalStackLayout>
             </Grid>
         </VerticalStackLayout>
@@ -96,12 +101,12 @@
         <Label 
                 Text="Trafó adatok"
                 FontSize="20"
-                TextColor="LightGreen"
+                TextColor="LimeGreen"
                 Margin="15"
                 />
         <FlexLayout
             x:Name="Layout2"
-            Background="DarkGray"
+            BackgroundColor="White"
             JustifyContent="SpaceEvenly"
             Direction="Row"
             Wrap="Wrap"
@@ -111,9 +116,17 @@
                 WidthRequest="200"
                 Margin="15"
                 >
-                <Label Text="Trafó jelzőszám"/>
-                <Editor />
-                <Label Text="Fázis szám"/>
+                <Label
+                    Text="Trafó jelzőszám"
+                    TextColor="DimGray"
+                />
+                <Editor
+                    BackgroundColor="PaleGreen"
+                />
+                <Label
+                    Text="Fázis szám"
+                    TextColor="DimGray"
+                />
                 <Picker>
                     <Picker.Items>
                         <x:String>0</x:String>
@@ -127,25 +140,40 @@
                 WidthRequest="350"
                 Margin="15"
                 >
-                <Label Text="Trafó megnevezés"/>
+                <Label
+                    Text="Trafó megnevezés"
+                    TextColor="DimGray"
+                />
                 <Editor />
-                <Label Text="Áramkör"/>
-                <Editor Text="Az összes áramkör érintett"/>
+                <Label 
+                    Text="Áramkör"
+                    TextColor="DimGray"
+                />
+                <Editor
+                    Text="Az összes áramkör érintett"
+                    VerticalTextAlignment="Center"
+                />
             </VerticalStackLayout>
             <VerticalStackLayout
                 Margin="15"
-                >
+            >
                 <Label
-                Text="Trafó választás"
-                FontSize="20"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
+                    Text="TRAFÓ VÁLASZTÁS"
+                    Margin="15"
+                    TextColor="Gray"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
                 />
                 <Label
-                Text="Áramkörök"
-                FontSize="20"
-                HorizontalOptions="Center"
-                VerticalOptions="End"
+                    Text="ÁRAMKÖRÖK"
+                    Margin="15"
+                    TextColor="Gray"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
                 />
             </VerticalStackLayout>
         </FlexLayout>

@@ -8,59 +8,59 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = mauiResponsivityTest
-build_property.ProjectDir = C:\DevOps\BKMMirtusz\mauiResponsivityTest\
+build_property.ProjectDir = C:\Users\ipinter\source\repos\mauiResponsivityTest\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/App.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/AppShell.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/MainPage.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Resources/Styles/Colors.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Resources/Styles/Styles.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KitoltesView.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Views/KitoltesView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KitoltesView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\KitoltesView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\KitoltesView.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/KitoltesView2.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Views/KitoltesView2.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.KitoltesView2.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\KitoltesView2.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\KitoltesView2.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/MunkakView.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Views/MunkakView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.MunkakView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\MunkakView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\MunkakView.xaml
 
-[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/UrlapView.xaml]
+[C:/Users/ipinter/source/repos/mauiResponsivityTest/Views/UrlapView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.UrlapView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\UrlapView.xaml

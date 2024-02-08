@@ -6,6 +6,7 @@
 
     <ScrollView>
         <VerticalStackLayout
+            BackgroundColor="LightGray"
             Padding="30,0"
             Spacing="25">
             <views:KitoltesView2/>
