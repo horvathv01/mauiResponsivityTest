@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="mauiResponsivityTest.Views.UrlapView">
+    <VerticalStackLayout>
+        <Label 
+        Text="Űrlap"
+        FontSize="20"
+        TextColor="LightGreen"
+        Margin="15"
+        />
+        <VerticalStackLayout
+            Background="DarkGray"
+            Padding="15"
+            >
+            <Label Text="Esemény minősítése"/>
+            <FlexLayout
+            x:Name="Layout1"
+            JustifyContent="SpaceEvenly"
+            Wrap="Wrap"
+            Padding="15"
+            >
+                <Button 
+                x:Name="Button1"
+                Text="Előző munkavégzés során elvégezve"
+                BackgroundColor="Beige"
+                Clicked="Button_Clicked"
+                Margin="15"
+                />
+                <Button 
+                x:Name="Button2"
+                BackgroundColor="Beige"
+                Text="KÖF vonali üzemzavar (HÁLIR)"
+                Clicked="Button_Clicked"
+                Margin="15"
+                />
+                <Button 
+                x:Name="Button3"
+                BackgroundColor="Beige"
+                Text="KÖF/KIF vagy KIF hiba"
+                Clicked="Button_Clicked"
+                Margin="15"
+                />
+            </FlexLayout>
+            <Label Text="Volt fogyasztói kiesés"/>
+            <FlexLayout
+                x:Name="Layout2"
+                JustifyContent="SpaceEvenly"
+                Wrap="Wrap"
+                Padding="15"
+                >
+                <Button 
+                    x:Name="Button4"
+                    Text="nem volt"
+                    BackgroundColor="Beige"
+                    Clicked="Button_Clicked"
+                    Margin="15"
+                    />
+                <Button 
+                    x:Name="Button5"
+                    BackgroundColor="Beige"
+                    Text="volt"
+                    Clicked="Button_Clicked"
+                    Margin="15"
+                    />
+            </FlexLayout>
+
+            <Label Text="Berendezéscsoport"/>
+            <FlexLayout
+     x:Name="Layout3"
+     JustifyContent="SpaceEvenly"
+     Wrap="Wrap"
+     Padding="15"
+     >
+                <Button 
+         x:Name="Button6"
+         Text="fogyasztói csatlakozó"
+         BackgroundColor="Beige"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button7"
+         BackgroundColor="Beige"
+         Text="KIF hálózat"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button8"
+         BackgroundColor="Beige"
+         Text="KÖF/KIF transzformátor állomás"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+
+                <Button 
+         x:Name="Button9"
+         BackgroundColor="Beige"
+         Text="közvilágítási hálózat"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+            </FlexLayout>
+
+            <Label Text="Gomberdő"/>
+            <FlexLayout
+     x:Name="Layout4"
+     JustifyContent="SpaceEvenly"
+     Wrap="Wrap"
+     Padding="15"
+     >
+                <Button 
+         x:Name="Button10"
+         Text="Akác"
+         BackgroundColor="Beige"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button11"
+         BackgroundColor="Beige"
+         Text="Fenyő"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button12"
+         BackgroundColor="Beige"
+         Text="Platán"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button13"
+         BackgroundColor="Beige"
+         Text="Juhar"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+                <Button 
+         x:Name="Button14"
+         BackgroundColor="Beige"
+         Text="Gesztenye"
+         Clicked="Button_Clicked"
+         Margin="15"
+         />
+            </FlexLayout>
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

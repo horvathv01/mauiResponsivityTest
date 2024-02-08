@@ -63,3 +63,9 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.MunkakView.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\MunkakView.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\MunkakView.xaml
+
+[C:/DevOps/BKMMirtusz/mauiResponsivityTest/Views/UrlapView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = mauiResponsivityTest.Views.UrlapView.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\UrlapView.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\UrlapView.xaml

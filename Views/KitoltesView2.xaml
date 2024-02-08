@@ -11,7 +11,7 @@
         Margin="15"
         />
         <FlexLayout 
-            x:Name="Layout"
+            x:Name="Layout1"
             Background="DarkGray"
             JustifyContent="SpaceEvenly"
             Wrap="Wrap"
@@ -48,10 +48,104 @@
                 TextColor="Red"
                 />
                 <Label
-                Text="Fogyasztó ellátva"
-                FontSize="30"
+                Text="FOGYASZTÓ ELLÁTVA"
+                FontAttributes="Bold"
+                FontSize="20"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
+                />
+            </VerticalStackLayout>
+
+        </FlexLayout>
+        <VerticalStackLayout
+            Margin="15"
+            >
+            <Label 
+                Text="Diagnosztika űrlap csomagok és űrlapok"
+                FontSize="20"
+                TextColor="LightGreen"
+                Margin="15"
+                />
+            <Grid
+                Background="DarkGray"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image 
+             x:Name="Icon"
+             Grid.Column="0"
+             Source="dotnet_bot.png"
+             Background="Yellow"
+             />
+                <VerticalStackLayout 
+             Margin="10"
+             Grid.Column="1">
+                    <Label 
+                 x:Name="Title"
+                 Text="Műszaki adatok űrlap"
+                 FontSize="16"
+                 FontAttributes="Bold"
+                 HorizontalOptions="Start" 
+                 />
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+
+        <Label 
+                Text="Trafó adatok"
+                FontSize="20"
+                TextColor="LightGreen"
+                Margin="15"
+                />
+        <FlexLayout
+            x:Name="Layout2"
+            Background="DarkGray"
+            JustifyContent="SpaceEvenly"
+            Direction="Row"
+            Wrap="Wrap"
+            Padding="15"
+            >
+            <VerticalStackLayout
+                WidthRequest="200"
+                Margin="15"
+                >
+                <Label Text="Trafó jelzőszám"/>
+                <Editor />
+                <Label Text="Fázis szám"/>
+                <Picker>
+                    <Picker.Items>
+                        <x:String>0</x:String>
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>3</x:String>
+                    </Picker.Items>
+                </Picker>
+            </VerticalStackLayout>
+            <VerticalStackLayout
+                WidthRequest="350"
+                Margin="15"
+                >
+                <Label Text="Trafó megnevezés"/>
+                <Editor />
+                <Label Text="Áramkör"/>
+                <Editor Text="Az összes áramkör érintett"/>
+            </VerticalStackLayout>
+            <VerticalStackLayout
+                Margin="15"
+                >
+                <Label
+                Text="Trafó választás"
+                FontSize="20"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                />
+                <Label
+                Text="Áramkörök"
+                FontSize="20"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
                 />
             </VerticalStackLayout>
         </FlexLayout>

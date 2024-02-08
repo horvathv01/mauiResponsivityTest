@@ -29,13 +29,13 @@
     <AppXManifest Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-02-07T18:01:50.411</Modified>
+      <Modified>2024-02-08T08:38:53.214</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-02-07T15:07:00.611</Modified>
+      <Modified>2024-02-08T08:08:47.113</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\mauiResponsivityTest.runtimeconfig.json">
       <PackagePath>mauiResponsivityTest.runtimeconfig.json</PackagePath>
@@ -43,11 +43,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\mauiResponsivityTest.dll">
       <PackagePath>mauiResponsivityTest.dll</PackagePath>
-      <Modified>2024-02-07T18:01:50.021</Modified>
+      <Modified>2024-02-08T08:38:52.714</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>mauiResponsivityTest.exe</PackagePath>
-      <Modified>2024-02-07T18:01:50.037</Modified>
+      <Modified>2024-02-08T08:38:52.720</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -287,7 +287,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\DevOps\BKMMirtusz\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\mauiResponsivityTest.deps.json">
       <PackagePath>mauiResponsivityTest.deps.json</PackagePath>
-      <Modified>2024-02-07T15:07:00.406</Modified>
+      <Modified>2024-02-08T07:42:31.593</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\vhorvath\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>
