@@ -34,6 +34,8 @@
                     TextColor="Black"
                     BackgroundColor="WhiteSmoke"
                     Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                 />
                 <Button 
                     x:Name="Button2"
@@ -41,6 +43,8 @@
                     BackgroundColor="WhiteSmoke"
                     Text="KÖF vonali üzemzavar (HÁLIR)"
                     Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                 />
                 <Button 
                     x:Name="Button3"
@@ -48,10 +52,12 @@
                     BackgroundColor="WhiteSmoke"
                     Text="KÖF/KIF vagy KIF hiba"
                     Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                 />
             </FlexLayout>
             <BoxView HeightRequest="1" Color="DarkGray" HorizontalOptions="FillAndExpand" Margin="0,5,0,5"/>
-            
+
             <Label Text="&#x25A0; Volt fogyasztói kiesés" TextColor="Black">
                 <Label.FormattedText>
                     <FormattedString>
@@ -72,6 +78,8 @@
                     TextColor="Black"
                     BackgroundColor="WhiteSmoke"
                     Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                 />
                 <Button 
                     x:Name="Button5"
@@ -79,6 +87,8 @@
                     BackgroundColor="WhiteSmoke"
                     Text="volt"
                     Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                 />
             </FlexLayout>
             <BoxView HeightRequest="1" Color="DarkGray" HorizontalOptions="FillAndExpand" Margin="0,5,0,5"/>
@@ -98,40 +108,45 @@
                  Padding="15"
              >
                 <Button 
-                     x:Name="Button6"
-                     Text="fogyasztói csatlakozó"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button6"
+                    Text="fogyasztói csatlakozó"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button7"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="KIF hálózat"
-
+                    x:Name="Button7"
+                    Text="KIF hálózat"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button8"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="KÖF/KIF transzformátor állomás"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button8"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="KÖF/KIF transzformátor állomás"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
 
                 <Button 
-                     x:Name="Button9"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="közvilágítási hálózat"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button9"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="közvilágítási hálózat"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
             </FlexLayout>
             <BoxView HeightRequest="1" Color="DarkGray" HorizontalOptions="FillAndExpand" Margin="0,5,0,5"/>
-            
+
             <Label Text="&#x25A0; Gomberdő" TextColor="Black">
                 <Label.FormattedText>
                     <FormattedString>
@@ -148,48 +163,53 @@
                  AlignItems="Stretch"
              >
                 <Button 
-                     x:Name="Button10"
-                     Text="Akác"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button10"
+                    Text="Akác"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button11"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="Fenyő"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button11"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="Fenyő"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button12"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="Platán"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button12"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="Platán"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button13"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="Juhar"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button13"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="Juhar"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
                 <Button 
-                     x:Name="Button14"
-                     TextColor="Black"
-                     BackgroundColor="WhiteSmoke"
-                     Text="Gesztenye"
-                     Clicked="Button_Clicked"
-
+                    x:Name="Button14"
+                    TextColor="Black"
+                    BackgroundColor="WhiteSmoke"
+                    Text="Gesztenye"
+                    Clicked="Button_Clicked"
+                    FlexLayout.Grow="1"
+                    Margin="5"
                  />
             </FlexLayout>
             <BoxView HeightRequest="1" Color="DarkGray" HorizontalOptions="FillAndExpand" Margin="0,5,0,5"/>
-            
+
         </VerticalStackLayout>
     </VerticalStackLayout>
 </ContentView>

@@ -13,15 +13,15 @@ public partial class UrlapView : ContentView
 		{
 			foreach( Button button in parent.Children )
 			{
-				button.BackgroundColor = Colors.Beige;
+				button.BackgroundColor = Colors.WhiteSmoke;
             }
 
-			if(buttonPressed.BackgroundColor == Colors.Beige )
+			if(buttonPressed.BackgroundColor == Colors.WhiteSmoke )
 			{
 				buttonPressed.BackgroundColor = Colors.LightGreen;
 			} else
 			{
-                buttonPressed.BackgroundColor = Colors.Beige;
+                buttonPressed.BackgroundColor = Colors.WhiteSmoke;
             }
 		}
     }

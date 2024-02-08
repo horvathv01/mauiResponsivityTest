@@ -25,6 +25,7 @@
                 x:Name="Title"
                 Text="Sürgős egyedi hiba üzemzavar elhárítás"
                 FontSize="16"
+                TextColor="Black"
                 FontAttributes="Bold"
                 HorizontalOptions="Start"
                 
@@ -32,6 +33,7 @@
                 <Label 
                 x:Name="Address"
                 Text="Nyékládháza, Petőfi Sándor utca 5007/e"
+                TextColor="Black"
                 HorizontalOptions="Start"
                 />
                 <Label

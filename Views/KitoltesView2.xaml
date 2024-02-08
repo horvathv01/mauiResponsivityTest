@@ -26,13 +26,17 @@
                 FontSize="15"
                 TextColor="DimGray"
                 />
-                <Editor />
+                <Editor 
+                    TextColor="Black"
+                    />
                 <Label
                 Text="Fogyasztó ellátva"
                     TextColor="DimGray"
                 FontSize="15"
                 />
-                <Editor />
+                <Editor 
+                    TextColor="Black"
+                    />
             </VerticalStackLayout>
 
             <VerticalStackLayout 
@@ -44,7 +48,10 @@
                     FontSize="15"
                     TextColor="DimGray"
                 />
-                <Editor BackgroundColor="PaleGreen"/>
+                <Editor 
+                    FontAttributes="Bold"
+                    BackgroundColor="PaleGreen"
+                    />
                 <Label 
                     Text="Töltsd ki a mezőt!"
                     FontSize="12"
@@ -88,11 +95,12 @@
                      Grid.Column="1">
                     <Label 
                          x:Name="Title"
-                        Margin="10"
+                         Margin="10"
                          Text="Műszaki adatok űrlap"
                          FontSize="16"
                          FontAttributes="Bold"
                          HorizontalOptions="Start" 
+                         TextColor="Black"
                     />
                 </VerticalStackLayout>
             </Grid>
@@ -122,12 +130,15 @@
                 />
                 <Editor
                     BackgroundColor="PaleGreen"
+                    FontAttributes="Bold"
                 />
                 <Label
                     Text="Fázis szám"
                     TextColor="DimGray"
                 />
-                <Picker>
+                <Picker
+                    TextColor="Black"
+                    >
                     <Picker.Items>
                         <x:String>0</x:String>
                         <x:String>1</x:String>
@@ -144,12 +155,15 @@
                     Text="Trafó megnevezés"
                     TextColor="DimGray"
                 />
-                <Editor />
+                <Editor 
+                    TextColor="Black"
+                    />
                 <Label 
                     Text="Áramkör"
                     TextColor="DimGray"
                 />
                 <Editor
+                    TextColor="Black"
                     Text="Az összes áramkör érintett"
                     VerticalTextAlignment="Center"
                 />
