@@ -30,13 +30,13 @@
     <AppXManifest Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-02-08T09:19:34.533</Modified>
+      <Modified>2024-02-08T14:39:36.973</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-02-08T09:19:34.351</Modified>
+      <Modified>2024-02-08T14:39:36.804</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\mauiResponsivityTest.runtimeconfig.json">
       <PackagePath>mauiResponsivityTest.runtimeconfig.json</PackagePath>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\mauiResponsivityTest.dll">
       <PackagePath>mauiResponsivityTest.dll</PackagePath>
-      <Modified>2024-02-08T09:19:33.050</Modified>
+      <Modified>2024-02-08T14:39:35.821</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>mauiResponsivityTest.exe</PackagePath>
-      <Modified>2024-02-08T09:19:33.063</Modified>
+      <Modified>2024-02-08T14:39:35.836</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\ipinter\source\repos\mauiResponsivityTest\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
