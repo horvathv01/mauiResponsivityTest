@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="mauiResponsivityTest.Views.MunkakView">
     <VerticalStackLayout
-        Background="DarkGray"
+        Background="White"
         >
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="6"/>
             </Grid.ColumnDefinitions>
             <Image 
                 x:Name="Icon"
                 Grid.Column="0"
                 Source="dotnet_bot.png"
-                Background="Yellow"
+                Background="Orange"
                 />
             <VerticalStackLayout 
                 Margin="10"
@@ -25,7 +26,8 @@
                 Text="Sürgős egyedi hiba üzemzavar elhárítás"
                 FontSize="16"
                 FontAttributes="Bold"
-                HorizontalOptions="Start" 
+                HorizontalOptions="Start"
+                
                 />
                 <Label 
                 x:Name="Address"
@@ -35,6 +37,7 @@
                 <Label
                 x:Name="JobId"    
                 Text="3579028/1/1"
+                TextColor="DimGray"
                 />
             </VerticalStackLayout>
             <VerticalStackLayout 
@@ -43,16 +46,25 @@
                 <Label
                 x:Name="Date"
                 Text="2024. 02. 07."
+                TextColor="DimGray"
                 HorizontalOptions="End"
                 VerticalOptions="Start"
                 />
                 <Label
-                x:Name="JobInfo"
-                Text="Új Kiadott"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                />
+                    x:Name="JobInfo"
+                    Text="Új Kiadott"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                >
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Új" TextColor="LimeGreen" />
+                            <Span Text=" Kiadott" TextColor="DimGray" FontSize="15" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </VerticalStackLayout>
+            <VerticalStackLayout BackgroundColor="Orange" Grid.Column="3"/>
         </Grid>
     </VerticalStackLayout>
 </ContentView>
