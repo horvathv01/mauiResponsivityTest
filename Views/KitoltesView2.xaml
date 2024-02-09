@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="mauiResponsivityTest.Views.KitoltesView2">
+    
 
     <VerticalStackLayout>
         <Label 
@@ -77,18 +78,27 @@
                 TextColor="LimeGreen"
                 Margin="15"
                 />
+            <VerticalStackLayout BackgroundColor="White" MinimumHeightRequest="100" Padding="20">
+            <Frame
+                BorderColor="LightGray"
+                CornerRadius="2"
+                Padding="5"
+                Margin="10"
+                HasShadow="True"
+            >
             <Grid
                 Background="White"
                 >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="6"/>
                 </Grid.ColumnDefinitions>
                 <Image 
                      x:Name="Icon"
                      Grid.Column="0"
                      Source="dotnet_bot.png"
-                     Background="Gold"
+                     Background="Orange"
                 />
                 <VerticalStackLayout 
                      Margin="10"
@@ -103,7 +113,11 @@
                          TextColor="Black"
                     />
                 </VerticalStackLayout>
+                <VerticalStackLayout BackgroundColor="Orange" Grid.Column="3"/>
+            
             </Grid>
+            </Frame>
+            </VerticalStackLayout>
         </VerticalStackLayout>
 
         <Label 
