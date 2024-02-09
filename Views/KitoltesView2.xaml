@@ -81,6 +81,7 @@
             <VerticalStackLayout BackgroundColor="White" MinimumHeightRequest="100" Padding="20">
             <Frame
                 BorderColor="LightGray"
+                BackgroundColor="White"
                 CornerRadius="2"
                 Padding="5"
                 Margin="10"

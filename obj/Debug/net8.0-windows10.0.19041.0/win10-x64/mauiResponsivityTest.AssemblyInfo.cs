@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("mauiResponsivityTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+bfafb7a4da62ec687f380eb5c49851bd99cd7310")]
 [assembly: System.Reflection.AssemblyProductAttribute("mauiResponsivityTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("mauiResponsivityTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

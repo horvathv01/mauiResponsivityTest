@@ -1,1 +1,1 @@
-C:\Users\ipinter\source\repos\mauiResponsivityTest\mauiResponsivityTest.csproj;x64
+C:\DevOps\BKMMirtusz\mauiResponsivityTest\mauiResponsivityTest.csproj;x64
